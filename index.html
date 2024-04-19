@@ -3,57 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Szabi Vaida's Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#portfolio">Portfolio</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#socialmedia1">Social Media 1</a></li>
-            <li><a href="#socialmedia2">Social Media 2</a></li>
-            <li><a href="#socialmedia3">Social Media 3</a></li>
-        </ul>
-    </nav>
-    <header>
-        <h1>Welcome to My Portfolio</h1>
-    </header>
-    <main>
-
-        <section id="about">
-            <!-- About content -->
-            <div id="description1">
-                <h2>Programmer</h2>
-                <p>I am a passionate programmer with experience in...</p>
+    <div class="content" id="section1">
+        <h1 class="title">Szabi Vaida</h1>
+        <h1 class="subtitle">Personal Website</h1>
+        <div>
+            <h1>About Me</h1>
+            <p>My name is Szabi Vaida, and I'm a Full Stack Developer. I'm from Romania, living in the United Kingdom, Sheffield, and currently working at Clear Links Support. You can find me on 
+                <a href="https://www.linkedin.com/in/szabolcs-levente-vaida-336457214/" target="_blank"><i class="fab fa-linkedin gray-icon"></i></a>
+                <a href="https://github.com/szabi-vaida" target="_blank"><i class="fab fa-github gray-icon"></i></a>
+                <a href="https://www.instagram.com/szabi.vaida/" target="_blank"><i class="fab fa-instagram gray-icon"></i></a>
+            </p>
+            <p>On this page you can find some information about me, the projects that I have been working on lately, and some of my interests. 
+                I always envisioned myself working on projects where my code reflects my beliefs and values. 
+                I thrive in an environment where I feel that my work is making a positive impact on society.
+            </p>
+            <div id="cols" class="row">
+                <div class="column">
+                    <h2>
+                        <li class="fas fa-history gray-icon icon1">Life so far...</li>
+                    </h2>
+                    <ul>
+                        <li>
+                            Born in 1996  
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Ventured studying Computer Science for Games in 2019 
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Worked various jobs as both a contracted and freelance tester from 2021 to 2022
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Started working at Clear Links Support in 2022
+                        </li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h2>
+                        <li class="fas fa-fire gray-icon icon2">Interests...</li>
+                    </h2>
+                    <ul>
+                        <li>
+                            Everything music related
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Food, and how to cook it
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Games, be it video-games or boardgames
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Nature
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Movies
+                        </li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h2>
+                        <li class="fas fa-rocket gray-icon icon3">Visions of the future...</li>
+                    </h2>
+                    <ul>
+                        <li>
+                           Never stop learning
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Enhance my abilities as a developer/programmer/engineer
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Develop a game that will bring smiles onto peoples faces
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Be an active member of the society
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div id="image">
-                <img src="images/image.jpg" alt="Your Image Description">
+        </div>
+        <div id="section2">
+            <h1>Projects</h1>
+            <article class="project-item">
+                <section class="left">
+                    <a class="no-underline" href="https://valentinesquiz.netlify.app">
+                        <img src="images/valentine.png" alt="Quiz Of The Day" loading="lazy" height="150" width="250">
+                    </a>
+                </section>
+                <section class="right">
+                    <h1 class="projecthead">Quiz of the Day</h1>
+                    <p>This website is a work in progress. It features a quiz, and based on the answers you provide, you will receive a personalized e-card. 
+                        Please note that the scope of the website may change as development continues, as it is an ongoing project. 
+                        The current functionality includes the quiz and e-card generation for specific days of the year.</p>
+                </section>
+            </article>
+        </div>
+        <footer>
+            <div class="footer-left">
+              <p>&copy; Copyright © 2024 Szabi Vaida</p>
             </div>
-            <div id="description2">
-                <h2>Another Thing I Do</h2>
-            <p>When I'm not coding, I enjoy...</p>
+            <div class="footer-right">
+              <a href="#section1">Home</a>
+              <a href="#section2">Projects</a>
+              <a href="">Contact</a>
             </div>
-        </section>
-        <section id="portfolio">
-            <!-- Portfolio content -->
-            <div id="Project1"><p>Project 1</p></div>
-            <div id="Project2"><p>Project 2</p></div>
-            <div id="Project3"><p>Project 3</p></div>
-        </section>
-        <section id="contact">
-            <!-- Contact content -->
-            <div id="Concat"><p>Contact</p></div>
-        </section>
-    </main>
-    <hr> <!-- Horizontal line divider -->
-    
-    <!-- Additional content goes here -->
-
-    <footer>
-        <p>© 2023 Szabi Vaida. All Rights Reserved.</p>
-    </footer>
-    <script src="script.js"></script>
+          </footer>
+    </div>
 </body>
 </html>
+
