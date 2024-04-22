@@ -4,7 +4,8 @@ html{
 
 /* Global Styles */
 body {
-    font-family:'Midsole';
+    font-family:'Roboto';
+    font-size: 17px;
     background-color: #1f1f1f;
     margin: 0;
     padding: 0;
