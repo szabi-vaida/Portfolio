@@ -6,23 +6,30 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 </head>
 <body>
     <div class="content">
-        <h1 class="title">Szabi Vaida</h1>
-        <h1 class="subtitle">Personal Website</h1>
+        <div class="title-wrapper">
+            <div>
+                <h1 class="title">Szabi Vaida</h1>
+                <h1 class="subtitle">Personal Website</h1>
+                <h1 class="segment-title">About Me</h1>
+                <hr style="height:2px;border:1px solid #666666; box-shadow: inset 0px 2px 3px #cccccc;" />
+                <p>My name is Szabi Vaida, and I'm a Full Stack Developer from Romania. Currently, I live in Sheffield, United Kingdom, and I am employed at Clear Links Support. You can find me on 
+                    <a href="https://www.linkedin.com/in/szabolcs-levente-vaida-336457214/" target="_blank"><i class="fab fa-linkedin gray-icon"></i></a>,
+                    <a href="https://www.instagram.com/szabi.vaida/" target="_blank"><i class="fab fa-instagram gray-icon"></i></a> or
+                    <a href="https://github.com/szabi-vaida" target="_blank"><i class="fab fa-github gray-icon"></i></a> 
+                </p>
+                <p>On this page you can find some information about me, the projects that I have been working on lately, and some of my interests. 
+                    I always envisioned myself working on projects where my code reflects my beliefs and values. 
+                    I thrive in an environment where I feel that my work is making a positive impact on society.
+                </p>
+            </div>
+            <img src="images/title_photo.jpg" alt="Title Photo" class="title-photo">
+        </div>
         <hr style="height:2px;border:1px solid #666666; box-shadow: inset 0px 2px 3px #cccccc;" />
         <div>
-            <h1>About Me</h1>
-            <p>My name is Szabi Vaida, and I'm a Full Stack Developer from Romania. Currently, I live in Sheffield, United Kingdom, and I am employed at Clear Links Support. You can find me on 
-                <a href="https://www.linkedin.com/in/szabolcs-levente-vaida-336457214/" target="_blank"><i class="fab fa-linkedin gray-icon"></i></a>
-                <a href="https://github.com/szabi-vaida" target="_blank"><i class="fab fa-github gray-icon"></i></a>
-                <a href="https://www.instagram.com/szabi.vaida/" target="_blank"><i class="fab fa-instagram gray-icon"></i></a>
-            </p>
-            <p>On this page you can find some information about me, the projects that I have been working on lately, and some of my interests. 
-                I always envisioned myself working on projects where my code reflects my beliefs and values. 
-                I thrive in an environment where I feel that my work is making a positive impact on society.
-            </p>
             <div id="cols" class="row">
                 <div class="column">
                     <h2>
@@ -105,12 +112,25 @@
                     </ul>
                 </div>
             </div>
+            <h1 class="segment-title">My Skills</h1>
+            <div class="skills" id="skills">
+                <i><a href="https://developer.mozilla.org/en-US/docs/Web/HTML"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-plain-wordmark.svg" alt="HTML5"></a></i>
+                <i><a href="https://www.w3.org/Style/CSS"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-plain-wordmark.svg" alt="CSS3"></a></i>
+                <i><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript"></a></i>
+                <i><a href="https://isocpp.org/get-started"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-plain.svg" alt="C++"></a></i>
+                <i><a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-plain.svg" alt="C#"></a></i>
+                <i><a href="https://docs.microsoft.com/en-us/dotnet/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dotnetcore/dotnetcore-original.svg" alt=".NET Core"></a></i>
+                <i><a href="https://azure.microsoft.com/en-us/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azure/azure-original.svg" alt="Azure"></a></i>
+                <i><a href="https://en.wikipedia.org/wiki/SQL"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azuresqldatabase/azuresqldatabase-original.svg" alt="SQL"></a></i>
+                <i><a href="https://git-scm.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-plain-wordmark.svg" alt="Git"></a></i>
+                <i><a href="https://nodejs.org/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="Node.js"></a></i>
+            </div>
         </div>
         <div>
-            <h1>Projects</h1>
+            <h1 class="segment-title">Projects</h1>
             <article class="project-item">
                 <section class="left">
-                    <a class="no-underline" href="https://evibecards.netlify.app">
+                    <a class="project-image" href="https://evibecards.netlify.app">
                         <img src="images/valentine.png" alt="Quiz Of The Day" loading="lazy" height="150" width="250">
                     </a>
                 </section>
@@ -131,6 +151,7 @@
             </div>
           </footer>
     </div>
+    <script src="skills.js"></script>   
 </body>
 </html>
 

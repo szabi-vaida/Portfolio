@@ -19,6 +19,62 @@ body {
     padding: 2rem;
   }
   
+  .about-me{
+    margin-left: 100px;
+  }
+  .title-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .title-photo{
+    width: 450px;
+    height: 300px;
+    border: 3px solid #333;
+    border-radius: 25px;
+    margin-left: 5px;
+  }
+
+  .skills{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+.skills i {
+    width: 75px; 
+    margin-right: 10px; 
+    margin-bottom: 10px; 
+    transition: transform 0.1s ease;
+    animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse{
+  0% {
+    transform: scale(1);
+  }
+  100%{
+    transform: scale(1.1);
+  }
+}
+
+.project-image img{
+  transition: 0.3s ease;
+}
+
+.project-image:hover img{
+transform: scale(1.2);
+}
+
+.skills i img {
+    width: 100%; 
+}
+
+  .title{
+    margin-bottom: 25px;
+  }
+
   /* Subtitle Styles */
   .subtitle {
     color: #333;
@@ -50,7 +106,7 @@ body {
   /* General Paragraph Styles */
   p, li {
     text-align: left;
-    color:#999999
+    color:#F9F6EE;
   }
 
   li.icon1, li.icon2, li.icon3 {
