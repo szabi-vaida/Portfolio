@@ -7,3 +7,5 @@ skillsContainer.querySelectorAll('i').forEach((icon) => {
 function getRandomDelay(){
     return Math.random() * 5;
 }
+
+
