@@ -1,164 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/style.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
+    <link href="styles/output.css" rel="stylesheet">
+    <link href="styles/style.css" rel="stylesheet">
+    <link href="styles/darkmode.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous" rel="stylesheet" />
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <link type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" />
+    <title>Szabi Vaida</title>
 </head>
-<body>
-    <div class="content">
-        <div class="theme-switch-wrapper">
-            <label class="theme-switch" for="checkbox">
-                <input type="checkbox" id="checkbox" />
-                <div class="slider round"></div>
+
+<body class="bg-gray-700 text-gray-100">
+    <div class="container mx-auto p-8">
+        <!-- Theme Switcher -->
+        <div class="theme-switch-wrapper flex justify-end mb-4">
+            <label class="theme-switch relative inline-block w-12 h-6">
+                <input type="checkbox" id="checkbox" class="hidden" />
+                <span class="slider round absolute cursor-pointer inset-0 bg-gray-400 rounded-full before:absolute before:content-[''] before:h-6 before:w-6 before:left-0.5 before:bottom-0.5 before:bg-white before:rounded-full transition"></span>
             </label>
-            <em>Light Mode!</em>
+            <em class="ml-3 text-gray-100">Light Mode!</em>
         </div>
-        <div class="title-wrapper">
-            <div>
-                <h1 class="title">Szabi Vaida</h1>
-                <h1 class="subtitle">Personal Website</h1>
-                <h1 class="segment-title">About Me</h1>
-                <hr class="lines">
-                <p>My name is Szabi Vaida, and I'm a Full Stack Developer from Romania. Currently, I live in Sheffield, United Kingdom, and I am employed at Clear Links Support. You can find me on 
-                    <a href="https://www.linkedin.com/in/szabolcs-levente-vaida-336457214/" target="_blank"><i class="fab fa-linkedin gray-icon"></i></a>,
-                    <a href="https://www.instagram.com/szabi.vaida/" target="_blank"><i class="fab fa-instagram gray-icon"></i></a> or
-                    <a href="https://github.com/szabi-vaida" target="_blank"><i class="fab fa-github gray-icon"></i></a> 
+
+        <!-- Title Section -->
+        <div class="title-wrapper flex flex-col lg:flex-row items-center lg:justify-between">
+            <div class="text-center lg:text-left ">
+                <h1 class="text-center text-4xl font-bold text-gray-950 mb-4">Szabi Vaida</h1>
+                <h2 class="text-center text-2xl text-zinc-400 mb-2">Personal Website</h2>
+                <hr class="border-t-2 border-gray-300 mb-4">
+                <h2 class="text-3xl font-semibold text-gray-950 mb-6 underline">About Me</h2>
+                <p class="mb-4 leading-relaxed">
+                    My name is Szabi Vaida, and I'm a Full Stack Developer. I live in Sheffield, United Kingdom, and I am employed at Clear Links Technologies, where we strive to provide the best student support services as our primary focus, occasionally venturing into other realms of tech.
                 </p>
-                <p>On this page you can find some information about me, the projects that I have been working on lately, and some of my interests. 
-                    I always envisioned myself working on projects where my code reflects my beliefs and values. 
-                    I thrive in an environment where I feel that my work is making a positive impact on society.
+                <p class="leading-relaxed">
+                    On this page, you can find information about me, the projects I’ve worked on, and my interests. 
+                    You can also find me on 
+                    <a href="https://www.linkedin.com/in/szabolcs-levente-vaida-336457214/" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors duration-300"><i class="fab fa-linkedin"></i></a>,
+                    <a href="https://www.instagram.com/szabi.vaida/" target="_blank" class="text-pink-600 hover:text-pink-800 transition-colors duration-300"><i class="fab fa-instagram"></i></a>, 
+                    or 
+                    <a href="https://github.com/szabi-vaida" target="_blank" class="text-gray-600 hover:text-gray-900 transition-colors duration-300"><i class="fab fa-github"></i></a>.
                 </p>
             </div>
-            <img src="images/title_photo.jpg" alt="Title Photo" class="title-photo">
-        </div>
-        <hr class="lines">
-        <div>
-            <div id="cols" class="row">
-                <div class="column">
-                    <h2>
-                        <li class="fas fa-history gray-icon icon1">Life so far...</li>
-                    </h2>
-                    <ul>
-                        <li>
-                            Born in 1996  
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Ventured studying Computer Science for Games in 2019 
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Worked various jobs as both a contracted and freelance tester from 2021 to 2022
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Started working at Clear Links Support in 2022
-                        </li>
-                    </ul>
-                </div>
-                <div class="column">
-                    <h2>
-                        <li class="fas fa-fire gray-icon icon2">Interests...</li>
-                    </h2>
-                    <ul>
-                        <li>
-                            Everything music related
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Food, and how to cook it
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Games, be it video-games or boardgames
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Nature
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Movies
-                        </li>
-                    </ul>
-                </div>
-                <div class="column">
-                    <h2>
-                        <li class="fas fa-rocket gray-icon icon3">Visions of the future...</li>
-                    </h2>
-                    <ul>
-                        <li>
-                           Never stop learning
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Enhance my abilities as a developer/programmer/engineer
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Develop a game that will bring smiles onto peoples faces
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Be an active member of the society
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <h1 class="segment-title">My Skills</h1>
-            <div class="skills" id="skills">
-                <i><a href="https://developer.mozilla.org/en-US/docs/Web/HTML"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-plain-wordmark.svg" alt="HTML5"></a></i>
-                <i><a href="https://www.w3.org/Style/CSS"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-plain-wordmark.svg" alt="CSS3"></a></i>
-                <i><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript"></a></i>
-                <i><a href="https://isocpp.org/get-started"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-plain.svg" alt="C++"></a></i>
-                <i><a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-plain.svg" alt="C#"></a></i>
-                <i><a href="https://docs.microsoft.com/en-us/dotnet/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dotnetcore/dotnetcore-original.svg" alt=".NET Core"></a></i>
-                <i><a href="https://azure.microsoft.com/en-us/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azure/azure-original.svg" alt="Azure"></a></i>
-                <i><a href="https://en.wikipedia.org/wiki/SQL"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azuresqldatabase/azuresqldatabase-original.svg" alt="SQL"></a></i>
-                <i><a href="https://git-scm.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-plain-wordmark.svg" alt="Git"></a></i>
-                <i><a href="https://nodejs.org/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="Node.js"></a></i>
+            <div class="lg:w-1/1 flex justify-center lg:justify-end mt-6 lg:mt-16">
+                <img src="images/title_photo.jpg" alt="Title Photo" class="w-256 h-256 rounded-full shadow-lg">
             </div>
         </div>
-        <div>
-            <h1 class="segment-title">Projects</h1>
-            <article class="project-item">
-                <section class="left">
-                    <a class="project-image" href="https://evibecards.netlify.app">
-                        <img src="images/valentine.png" alt="Quiz Of The Day" loading="lazy" height="150" width="250">
-                    </a>
-                </section>
-                <section class="right">
-                    <h1 class="projecthead">eVibe cards</h1>
-                    <p>This project introduces a website where you can create or view a digital, custom-made postcard, referred to as an eVibe card.</p>
-                </section>
-            </article>
+
+        <!-- Life, Interests, Visions Section -->
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="column bg-gray-500 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-400 transform rotate-x-6 rotate-y-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-history mr-2"></i> Life so far...</h2>
+                <ul class="list-disc pl-6">
+                    <li>Born in 1996</li>
+                    <li>Ventured into studying Computer Science for Games in 2019</li>
+                    <li>Worked as a contracted and freelance tester from 2021 to 2022</li>
+                    <li>Started working at Clear Links Technologies in 2022</li>
+                </ul>
+            </div>
+            <div class="column bg-gray-500 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-400 transform rotate-x-6 rotate-y-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-fire mr-2"></i> Interests...</h2>
+                <ul class="list-disc pl-6">
+                    <li>Average music enjoyer and bad music producer</li>
+                    <li>Cooking and baking</li>
+                    <li>Games (video-games and boardgames)</li>
+                    <li>Hiking and camping</li>
+                    <li>Reading</li>
+                </ul>
+            </div>
+            <div class="column bg-gray-500 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-400 transform rotate-x-6 rotate-y-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-rocket mr-2"></i> Visions of the future...</h2>
+                <ul class="list-disc pl-6">
+                    <li>Never stop learning</li>
+                    <li>Enhance my abilities as a developer/programmer/engineer</li>
+                    <li>Develop a game that brings smiles to people's faces</li>
+                    <li>Be an even more active member and positively contribute to the society </li>
+                </ul>
+            </div>
         </div>
-        <hr class="lines">
-        <footer>
-            <div class="footer-left">
-              <p>&copy; Copyright © 2024 Szabi Vaida</p>
+
+        <!-- Skills Section -->
+        <div class="mt-12">
+            <h2 class="text-3xl font-semibold text-gray-950 mb-6 underline">My Skills</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8" id="skills">
+                <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/" class="text-center bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 hover:scale-105 hover:shadow-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-plain.svg" alt="C#" class="w-16 mx-auto">
+                    <p class="font-semibold mt-2 text-gray-800 ">C#</p>
+                </a>
+                <a href="https://learn.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver16" class="text-center bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 hover:scale-105 hover:shadow-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/microsoftsqlserver/microsoftsqlserver-original.svg"  alt="SQL" class="w-16 mx-auto">
+                    <p class="font-semibold mt-2 text-gray-800 ">SQL</p>
+                </a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" class="text-center bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 hover:scale-105 hover:shadow-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript" class="w-16 mx-auto">
+                    <p class="font-semibold mt-2 text-gray-800 ">JavaScript</p>
+                </a>
+                <a href="https://docs.microsoft.com/en-us/dotnet/" class="text-center bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 hover:scale-105 hover:shadow-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dotnetcore/dotnetcore-original.svg" alt=".NET Core" class="w-16 mx-auto">
+                    <p class="font-semibold mt-2 text-gray-800 ">.NET Core</p>
+                </a>
+                <a href="https://azure.microsoft.com/en-us/" class="text-center bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 hover:scale-105 hover:shadow-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azure/azure-original.svg" alt="Azure" class="w-16 mx-auto">
+                    <p class="font-semibold mt-2 text-gray-800 ">Azure</p>
+                </a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" class="text-center bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 hover:scale-105 hover:shadow-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-plain-wordmark.svg" alt="HTML5" class="w-16 mx-auto">
+                    <p class="font-semibold mt-2 text-gray-800 ">HTML5</p>
+                </a>
+                <a href="https://www.w3.org/Style/CSS" class="text-center bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 hover:scale-105 hover:shadow-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-plain-wordmark.svg" alt="CSS3" class="w-16 mx-auto">
+                    <p class="font-semibold mt-2 text-gray-800 ">CSS3</p>
+                </a>
+                <a href="https://isocpp.org/get-started" class="text-center bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 hover:scale-105 hover:shadow-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-plain.svg" alt="C++" class="w-16 mx-auto">
+                    <p class="font-semibold mt-2 text-gray-800 ">C++</p>
+                </a>
+                <a href="https://nodejs.org/" class="text-center bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 hover:scale-105 hover:shadow-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="Node.js" class="w-16 mx-auto">
+                    <p class="font-semibold mt-2 text-gray-800 ">Node.js</p>
+                </a>
+                <a href="https://git-scm.com/" class="text-center bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 hover:scale-105 hover:shadow-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-plain-wordmark.svg" alt="Git" class="w-16 mx-auto">
+                    <p class="font-semibold mt-2 text-gray-800 ">Git</p>
+                </a>
             </div>
-            <div class="footer-right">
-              <a href="/index.html">Home</a>
-              <a href="/contact.html">Contact</a>
+        </div>        
+
+        <!-- Projects Section -->
+        <div class="mt-12">
+            <h2 class="text-3xl font-semibold text-gray-950 mb-6 underline">Projects</h2>
+            <div class="project-item bg-gray-400 p-4 shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rounded-lg border border-gray-300 transform rotate-x-6 rotate-y-6 flex items-center">
+                <a href="https://evibecards.netlify.app" class="project-image w-full lg:w-1/3 mb-4 lg:mb-0 lg:mr-6">
+                    <img src="images/valentine.png" alt="eVibe Cards" class="rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-xl">
+                </a>
+                <div class="project-description w-2/3 ml-6">
+                    <h3 class="projecthead text-2xl font-bold mb-2">eVibe Cards</h3>
+                    <p class="mb-4 leading-relaxed">This project introduces a website where you can create or view digital, custom-made postcards, referred to as eVibe cards.</p>
+                </div>
             </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 py-4 border-t-2 border-gray-300 flex justify-between items-center">
+            <p class="text-gray-200">&copy; 2024 Szabi Vaida</p>
         </footer>
     </div>
-    <script src="scripts/darkmode.js"></script> 
+
+    <!-- Scripts -->
+    <script src="scripts/darkmode.js"></script>
     <script src="scripts/animation.js"></script>
 </body>
+
 </html>
