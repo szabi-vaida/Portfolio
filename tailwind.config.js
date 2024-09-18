@@ -6,7 +6,15 @@ module.exports = {
   ],
   theme: {
     extend: {
-      // You can add custom theme configurations here if needed
+      colors: {
+        background: '#2c3e50',
+        primaryText: '#ecf0f1',
+        secondaryText: '#bdc3c7',
+        accent: '#1abc9c',
+        cardBackground: '#34495e',
+        border: '#1a252f',
+        shadow: 'rgba(0, 0, 0, 0.3)',
+      },
     },
   },
   plugins: [
