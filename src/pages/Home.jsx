@@ -1,149 +1,218 @@
-import React from "react";
-import { Grid, Typography, Box, Avatar, Link, IconButton, Divider } from "@mui/material";
-import { LinkedIn, Instagram, GitHub, History, Whatshot, Rocket } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
+import {
+  Grid,
+  Typography,
+  Box,
+  Avatar,
+  Divider,
+  Paper,
+} from "@mui/material";
 
 import Section from "../components/Section";
-import SkillCard from "../components/SkillCard";
+import AboutSectionsCard from "../components/AboutSectionCard";
+import SkillOrb from "../components/SkillOrb";
 import ProjectCard from "../components/ProjectCard";
 import BlogCard from "../components/BlogCard";
 
-import skills from "../data/skills";
-import projects from "../data/projects";
-import blog from "../data/blog";
+import { supabase } from "../lib/supabaseClient";
 
 export default function Home() {
+  const [skills, setSkills] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [blog, setBlog] = useState([]);
+
+  // ================= FETCH DATA FROM SUPABASE =================
+  useEffect(() => {
+    async function loadData() {
+      const { data: skillsData } = await supabase.from("skills").select("*");
+      const { data: projectsData } = await supabase.from("projects").select("*");
+      const { data: blogData } = await supabase.from("blog").select("*");
+
+      setSkills(skillsData || []);
+      setProjects(projectsData || []);
+      setBlog(blogData || []);
+    }
+
+    loadData();
+  }, []);
+
   return (
     <>
-      {/* Hero / About */}
-      <Box
-        display="flex"
-        flexDirection={{ xs: "column", md: "row" }}
-        alignItems="center"
-        justifyContent="space-between"
-        mb={8}
+      {/* ================= HERO SECTION ================= */}
+      <Paper
+        elevation={4}
+        sx={{
+          p: { xs: 3, sm: 4, md: 6 },
+          mt: { xs: 2, md: 4 },
+          mb: 12,
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: { xs: 4, md: 6 },
+          borderRadius: 4,
+          bgcolor: "background.paper",
+          maxWidth: "1100px",
+          mx: "auto",
+        }}
       >
         <Box flex={1} textAlign={{ xs: "center", md: "left" }}>
           <Typography variant="h3" fontWeight="bold" gutterBottom>
             Szabi Vaida
           </Typography>
-          <Typography variant="h5" color="text.secondary" gutterBottom>
-            Personal Website
+
+          <Typography variant="h6" color="text.secondary" gutterBottom>
+            Full Stack Developer • Sheffield, United Kingdom
           </Typography>
-          <Divider sx={{ my: 2 }} />
-          <Typography variant="h4" fontWeight="bold" gutterBottom>
-            About Me
+
+          <Divider sx={{ my: 3 }} />
+
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            I'm a Full Stack Developer currently working at Clear Links
+            Technologies, building tools that improve UK student support.
           </Typography>
-          <Typography paragraph>
-            My name is Szabi Vaida, and I'm a Full Stack Developer. I live in Sheffield, United Kingdom, and I am employed at Clear Links Technologies, where we strive to provide the best student support services as our primary focus, occasionally venturing into other realms of tech.
+
+          <Typography variant="body1" sx={{ mb: 3 }}>
+            Below you’ll find my skills, projects, interests, and visions.
           </Typography>
-          <Typography paragraph>
-            On this page, you can find information about me, the projects I’ve worked on, and my interests.
-            You can also find me on:
-          </Typography>
-          <Box>
-            <IconButton
-              component={Link}
-              href="https://www.linkedin.com/in/szabolcs-levente-vaida-336457214/"
-              target="_blank"
-            >
-              <LinkedIn />
-            </IconButton>
-            <IconButton
-              component={Link}
-              href="https://www.instagram.com/szabi.vaida/"
-              target="_blank"
-            >
-              <Instagram />
-            </IconButton>
-            <IconButton
-              component={Link}
-              href="https://github.com/szabi-vaida"
-              target="_blank"
-            >
-              <GitHub />
-            </IconButton>
-          </Box>
         </Box>
 
-        <Box mt={{ xs: 4, md: 0 }}>
-          <Avatar
-            src="images/title_photo.jpg"
-            alt="Szabi Vaida"
-            sx={{
-              width: 256,
-              height: 256,
-              boxShadow: 6,
-              borderRadius: "50%",
-            }}
-          />
-        </Box>
+        <Avatar
+          src="images/title_photo.jpg"
+          alt="Szabi Vaida"
+          sx={{
+            width: { xs: 180, md: 260 },
+            height: { xs: 180, md: 260 },
+            boxShadow: 6,
+            borderRadius: "50%",
+            flexShrink: 0,
+          }}
+        />
+      </Paper>
+
+      {/* ================= ABOUT SECTIONS – BIG CARD ================= */}
+      <Box sx={{ my: 10 }}>
+        <AboutSectionsCard
+          sections={[
+            {
+              title: "Life so far",
+              items: [
+                "Born in 1996",
+                "Studied Computer Science for Games (2019)",
+                "QA Tester (2021–2022)",
+                "Developer at Clear Links Technologies (2022–present)",
+              ],
+            },
+            {
+              title: "Visions of the Future",
+              items: [
+                "Never stop learning",
+                "Grow as a developer & engineer",
+                "Create a meaningful game",
+                "Contribute positively to society",
+              ],
+            },
+            {
+              title: "Interests",
+              items: [
+                "Average music listener and creator",
+                "Cooking & baking",
+                "Gaming (boardgames + video games)",
+                "Hiking & camping",
+              ],
+            },
+          ]}
+        />
       </Box>
 
-      {/* Life, Interests, Visions */}
-      <Grid container spacing={3} mb={8}>
-        <Grid item xs={12} md={4}>
-          <Section title="Life so far...">
-            <Typography component="ul" sx={{ pl: 2 }}>
-              <li>Born in 1996</li>
-              <li>Studied Computer Science for Games in 2019</li>
-              <li>Worked as a tester (2021–2022)</li>
-              <li>Started at Clear Links Technologies in 2022</li>
-            </Typography>
-          </Section>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Section title="Interests...">
-            <Typography component="ul" sx={{ pl: 2 }}>
-              <li>Music & production</li>
-              <li>Cooking and baking</li>
-              <li>Games (video + board)</li>
-              <li>Hiking and camping</li>
-              <li>Reading</li>
-            </Typography>
-          </Section>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Section title="Visions of the future...">
-            <Typography component="ul" sx={{ pl: 2 }}>
-              <li>Never stop learning</li>
-              <li>Grow as a developer/engineer</li>
-              <li>Develop a game that brings joy</li>
-              <li>Contribute positively to society</li>
-            </Typography>
-          </Section>
-        </Grid>
-      </Grid>
-
-      {/* Skills */}
-      <Section title="My Skills">
-        <Grid container spacing={3}>
-          {skills.map((s) => (
-            <Grid item xs={6} sm={4} md={2} key={s.name}>
-              <SkillCard {...s} />
+      {/* ================= SKILLS ================= */}
+      <Section title="Skills">
+        <Grid
+          container
+          spacing={4}
+          sx={{
+            maxWidth: "1100px",
+            mx: "auto",
+            justifyContent: "center",
+          }}
+        >
+          {skills.map((skill) => (
+            <Grid
+              item
+              xs={4}
+              sm={3}
+              md={2}
+              key={skill.id}
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <SkillOrb name={skill.name} icon={skill.icon} link={skill.link} />
             </Grid>
           ))}
         </Grid>
       </Section>
 
-      {/* Projects */}
+      {/* ================= PROJECTS ================= */}
       <Section title="Projects">
-        {projects.map((p) => (
-          <ProjectCard key={p.title} {...p} />
-        ))}
+        <Grid
+          container
+          spacing={4}
+          sx={{
+            maxWidth: "1100px",
+            mx: "auto",
+            justifyContent: "center",
+            alignItems: "stretch",
+          }}
+        >
+          {projects.map((p) => (
+            <Grid
+              item
+              xs={12}
+              sm={10}
+              md={8}
+              lg={6}
+              key={p.id}
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <ProjectCard {...p} />
+            </Grid>
+          ))}
+        </Grid>
       </Section>
 
-      {/* Blog */}
-      <Section title="Blog">
-        {blog.map((b) => (
-          <BlogCard key={b.title} {...b} />
-        ))}
-      </Section>
+     {/* ================= BLOG ================= */}
+        <Section title="Mini-Blog">
+        <Grid
+            container
+            spacing={4}
+            sx={{
+            maxWidth: "1100px",
+            mx: "auto",
+            justifyContent: "center",
+            alignItems: "stretch",
+            }}
+        >
+            {blog
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) 
+            .slice(0, 3) 
+            .map((b) => (
+                <Grid
+                item
+                xs={12}
+                sm={10}
+                md={8}
+                lg={6}
+                key={b.id}
+                sx={{ display: "flex", justifyContent: "center" }}
+                >
+                <BlogCard title={b.title} content={b.content} />
+                </Grid>
+            ))}
+        </Grid>
+        </Section>
 
-      {/* Footer */}
-      <Box mt={8} py={4} borderTop={1} borderColor="divider" textAlign="center">
-        <Typography variant="body2" color="text.secondary">
-          © 2024 Szabi Vaida
-        </Typography>
+      {/* ================= FOOTER ================= */}
+      <Box mt={12} py={4} textAlign="center" color="text.secondary">
+        <Typography variant="body2">© 2025 Szabi Vaida</Typography>
       </Box>
     </>
   );
