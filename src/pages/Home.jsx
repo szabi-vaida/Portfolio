@@ -78,7 +78,7 @@ export default function Home() {
         </Box>
 
         <Avatar
-          src="images/title_photo.jpg"
+          src="/images/title_photo.jpg"
           alt="Szabi Vaida"
           sx={{
             width: { xs: 180, md: 260 },
