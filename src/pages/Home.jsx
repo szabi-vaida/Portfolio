@@ -108,8 +108,8 @@ export default function Home() {
                       title: "Experience Snapshot",
                       items: [
                         "Full-Stack Developer — Clear Links Technologies (2022–present)",
-                        "QA Tester (part-time while studying development) — Proper QA (2022-)",
-                        "Self-Employed Programming Tutor (Freelance)",
+                        "QA Tester (part-time) — Proper QA (2022-)",
+                        "Self-Employed Programming Tutor (Freelance) (2022-)",
                         "BSc: Computer Science for Games",
                       ],
                     },
