@@ -299,10 +299,10 @@ export default function App() {
       {/* MAIN CONTENT */}
       <Box
         sx={{
-          maxWidth: "1200px",
+          maxWidth: "1100px",
           mx: "auto",
-          px: 3,
-          py: { xs: 4, md: 8 },
+          px: { xs: 2, sm: 4 },
+          py: { xs: 4, md: 6 },
         }}
       >
         <Home />

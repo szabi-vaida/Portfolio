@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import useFadeInOnScroll from "../hooks/useFadeInOnScroll";
 
 export default function SkillOrb({ name, icon, link }) {
@@ -13,54 +13,55 @@ export default function SkillOrb({ name, icon, link }) {
       target="_blank"
       rel="noopener noreferrer"
       sx={{
-        width: 90,
-        height: 90,
-        borderRadius: "50%",
-        overflow: "hidden",
-        cursor: "pointer",
-
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
-
-        background: "rgba(255,255,255,0.06)",
-        backdropFilter: "blur(6px)",
-        border: "1px solid rgba(255,255,255,0.12)",
-        boxShadow: `
-          0 4px 10px rgba(0,0,0,0.3),
-          inset 0 0 12px rgba(255,255,255,0.12)
-        `,
-
-        transformStyle: "preserve-3d",
-        transition: "all 0.6s ease",
-
+        gap: 1,
         opacity: visible ? 1 : 0,
-        transform: visible
-          ? "translateY(0) scale(1)"
-          : "translateY(20px) scale(0.9)",
-
-        "&:hover": {
-          transform:
-            "translateY(-6px) scale(1.05) rotateX(8deg) rotateY(8deg)",
-          boxShadow: `
-            0 8px 20px rgba(0,0,0,0.45),
-            inset 0 0 16px rgba(255,255,255,0.18)
-          `,
+        transform: visible ? "translateY(0)" : "translateY(20px)",
+        transition: "opacity 0.5s ease, transform 0.5s ease",
+        textDecoration: "none",
+        "&:hover .orb": {
+          transform: "translateY(-5px) scale(1.08)",
+          boxShadow: 8,
         },
       }}
     >
       <Box
-        component="img"
-        src={icon}
-        alt={name}
+        className="orb"
         sx={{
-          width: 48,
-          height: 48,
-          pointerEvents: "none",
-          filter: "drop-shadow(0px 2px 4px rgba(0,0,0,0.4))",
-          transform: "translateZ(20px)",
+          width: { xs: 70, sm: 80 },
+          height: { xs: 70, sm: 80 },
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "background.paper",
+          border: "1px solid",
+          borderColor: "divider",
+          boxShadow: 2,
+          transition: "transform 0.25s ease, box-shadow 0.25s ease",
         }}
-      />
+      >
+        <Box
+          component="img"
+          src={icon}
+          alt={name}
+          sx={{
+            width: { xs: 36, sm: 42 },
+            height: { xs: 36, sm: 42 },
+            pointerEvents: "none",
+          }}
+        />
+      </Box>
+
+      <Typography
+        variant="caption"
+        color="text.secondary"
+        sx={{ fontWeight: 600, fontSize: "0.7rem" }}
+      >
+        {name}
+      </Typography>
     </Box>
   );
 }
