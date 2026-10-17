@@ -41,7 +41,7 @@ pages:
         heading: Szabi Vaida
         actions:
           - label: Forge
-            href: mailto:contact@szabivaida.dev
+            href: https://forsiteforge.netlify.app
           - label: contact@szabivaida.dev
             href: https://github.com/szabi-vaida
         image:
@@ -61,21 +61,21 @@ pages:
           I made Forge for people like me: anyone who wants to build a website, or learn how one is put together, and end up with something that doesn’t just work but is a pleasure to look at too.
         actions:
           - label: Forge
-            href: https://en.wikipedia.org/wiki/Forge
+            href: https://forsiteforge.netlify.app
         tone: tinted
       - type: timeline
         variant: line
         id: experience
         heading: Experience
         items:
-          - date: 2022 to present
-            title: Full-Stack Developer
-            place: Clear Links Technologies
+          - date: 2021 - 2022
+            title: Self-Employed Programming Tutor
           - date: "2022"
             title: QA Tester (part-time)
             place: Proper QA
-          - date: 2021 - 2022
-            title: Self-Employed Programming Tutor
+          - date: 2022 to present
+            title: Full Stack Developer
+            place: Clear Links Technologies
         tone: tinted
       - type: marquee
         variant: double
