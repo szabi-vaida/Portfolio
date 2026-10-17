@@ -4,9 +4,6 @@ meta:
   description: Szabi Vaida, Full-Stack Developer in Sheffield, UK, building and maintaining web applications at Clear Links Technologies.
   locale: en-GB
   url: https://szabivaida.dev
-  image:
-    src: https://szabivaida.dev/images/title_photo.jpg
-    alt: Szabi Vaida
 theme:
   name: signal
   toggle: true
@@ -43,9 +40,9 @@ pages:
         variant: split
         heading: Szabi Vaida
         actions:
-          - label: contact@szabivaida.dev
+          - label: Forge
             href: mailto:contact@szabivaida.dev
-          - label: GitHub
+          - label: contact@szabivaida.dev
             href: https://github.com/szabi-vaida
         image:
           src: https://media.licdn.com/dms/image/v2/D4E03AQFLlUaJpCCsQg/profile-displayphoto-crop_800_800/B4EZ7LCttYKoAI-/0/1781522948963?e=1793836800&v=beta&t=vKQsVyKOCBXB3XDLSpDAhgpSYrMNewRiWryabyQQk2A
