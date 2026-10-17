@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Divider, Paper, Grid } from "@mui/material";
+import { Box, Typography, Divider, Paper } from "@mui/material";
 import useFadeInOnScroll from "../hooks/useFadeInOnScroll";
 
 export default function AboutSectionsCard({ sections }) {
@@ -8,39 +8,42 @@ export default function AboutSectionsCard({ sections }) {
   return (
     <Paper
       ref={ref}
-      elevation={4}
+      elevation={3}
       sx={{
-        p: { xs: 3, md: 5 },
-        borderRadius: 4,
+        p: { xs: 3, sm: 4 },
+        borderRadius: 3,
         bgcolor: "background.paper",
-        maxWidth: "1200px",
-        mx: "auto",
+        height: "100%",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(25px)",
-        transition: "all 0.8s ease",
+        transition: "opacity 0.7s ease, transform 0.7s ease",
       }}
     >
-      <Grid container spacing={6}>
-        {sections.map((section, index) => (
-          <Grid item xs={12} md={4} key={index}>
-            <Typography
-              variant="h5"
-              fontWeight="bold"
-              sx={{ color: "primary.main", mb: 2 }}
-            >
-              {section.title}
-            </Typography>
+      {sections.map((section, index) => (
+        <Box key={index} sx={{ mb: index < sections.length - 1 ? 4 : 0 }}>
+          <Typography
+            variant="h6"
+            fontWeight={700}
+            sx={{ color: "primary.main", mb: 1.5 }}
+          >
+            {section.title}
+          </Typography>
 
-            <Divider sx={{ mb: 2 }} />
+          <Divider sx={{ mb: 2 }} />
 
-            <Typography component="ul" sx={{ pl: 2, lineHeight: 1.8 }}>
-              {section.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </Typography>
-          </Grid>
-        ))}
-      </Grid>
+          <Box component="ul" sx={{ pl: 2.5, m: 0 }}>
+            {section.items.map((item) => (
+              <Box
+                component="li"
+                key={item}
+                sx={{ mb: 0.75, color: "text.secondary", lineHeight: 1.7 }}
+              >
+                <Typography variant="body2">{item}</Typography>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      ))}
     </Paper>
   );
 }
