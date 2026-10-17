@@ -1,0 +1,10 @@
+{
+  "name": "@forge/cli",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "bin": { "forge": "./src/forge.ts" },
+  "exports": { ".": "./src/forge.ts", "./*": "./src/*" },
+  "dependencies": { "@forge/schema": "*", "yaml": "^2" }
+}

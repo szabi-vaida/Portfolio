@@ -1,0 +1,154 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Icon from '../primitives/Icon.astro';
+import Image from '../primitives/Image.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'testimonials'>>;
+
+const { section, anchor, first } = Astro.props;
+const { variant, tone, heading, intro, items } = section;
+const [lead, ...rest] = items;
+const others = variant === 'spotlight' ? rest : items;
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} intro={intro} align={variant === 'spotlight' ? 'centre' : 'start'} first={first}>
+  {
+    variant === 'spotlight' && lead && (
+      <figure class="spotlight">
+        {lead.rating && (
+          <p class="stars" role="img" aria-label={`${lead.rating} out of 5 stars`}>
+            {Array.from({ length: 5 }, (_, i) => (
+              <Icon name="star" size={1.2} class={i < lead.rating! ? 'on' : 'off'} />
+            ))}
+          </p>
+        )}
+        <blockquote>
+          <p>{lead.quote}</p>
+        </blockquote>
+        <figcaption>
+          {lead.image && (
+            <span class="avatar">
+              <Image image={lead.image} ratio="1/1" widths={[96, 192]} sizes="3rem" />
+            </span>
+          )}
+          <span>
+            <strong>{lead.name}</strong>
+            {lead.role && <span class="role">{lead.role}</span>}
+          </span>
+        </figcaption>
+      </figure>
+    )
+  }
+  {
+    others.length > 0 && (
+      <ul class="quotes" data-variant={variant} role="list">
+        {others.map((item) => (
+          <li>
+            <figure class="quote">
+              {item.rating && (
+                <p class="stars" role="img" aria-label={`${item.rating} out of 5 stars`}>
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Icon name="star" size={1} class={i < item.rating! ? 'on' : 'off'} />
+                  ))}
+                </p>
+              )}
+              <blockquote>
+                <p>{item.quote}</p>
+              </blockquote>
+              <figcaption>
+                {item.image && (
+                  <span class="avatar">
+                    <Image image={item.image} ratio="1/1" widths={[96, 192]} sizes="2.75rem" />
+                  </span>
+                )}
+                <span>
+                  <strong>{item.name}</strong>
+                  {item.role && <span class="role">{item.role}</span>}
+                </span>
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</Section>
+
+<style>
+  figure { margin: 0; }
+  blockquote { margin: 0; }
+  .stars { display: flex; gap: 0.15em; color: var(--color-accent); }
+  .stars :global(.on) { fill: currentColor; }
+  .stars :global(.off) { opacity: 0.35; }
+  figcaption {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--text-s);
+  }
+  figcaption strong { display: block; font-weight: 600; }
+  .role { display: block; color: var(--color-muted); }
+  .avatar {
+    flex: none;
+    width: 2.75rem;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  /* Grid: quotes flow into columns of their own height, like notes pinned to a wall. */
+  .quotes[data-variant='grid'] {
+    columns: 3 18rem;
+    column-gap: var(--space-l);
+  }
+  .quotes[data-variant='grid'] > li {
+    break-inside: avoid;
+    margin-bottom: var(--space-l);
+  }
+  .quote {
+    display: grid;
+    gap: var(--space-s);
+    padding: var(--space-l);
+    border-radius: var(--radius-m);
+    background: var(--color-surface);
+    border: 1px solid var(--hairline);
+  }
+  .quote blockquote p { line-height: 1.6; }
+
+  /* Spotlight: one review set large, the others in a quiet row underneath. */
+  .spotlight {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-m);
+    max-width: 52rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .spotlight blockquote p {
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    font-size: var(--text-2xl);
+    letter-spacing: var(--heading-tracking);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  .spotlight blockquote p::before { content: '“'; }
+  .spotlight blockquote p::after { content: '”'; }
+  .spotlight figcaption { text-align: left; }
+  .spotlight .avatar { width: 3rem; }
+  .quotes[data-variant='spotlight'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-l);
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--hairline);
+  }
+  .quotes[data-variant='spotlight'] .quote {
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  .quotes[data-variant='spotlight'] .quote blockquote p { color: var(--color-muted); }
+</style>

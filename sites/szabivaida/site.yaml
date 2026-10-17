@@ -1,0 +1,110 @@
+meta:
+  name: szabivaida
+  title: Szabi Vaida
+  description: Szabi Vaida, Full-Stack Developer in Sheffield, UK, building and maintaining web applications at Clear Links Technologies.
+  locale: en-GB
+  url: https://szabivaida.dev
+  image:
+    src: https://szabivaida.dev/images/title_photo.jpg
+    alt: Szabi Vaida
+theme:
+  name: signal
+  toggle: true
+  corners: round
+navbar:
+  variant: simple
+  links:
+    - label: About
+      href: /#about
+    - label: Experience
+      href: /#experience
+    - label: Skills
+      href: /#skills
+  button:
+    label: Get in touch
+    href: mailto:contact@szabivaida.dev
+  sticky: false
+footer:
+  variant: simple
+  text: Full-Stack Developer · Sheffield, UK
+  social:
+    - network: github
+      href: https://github.com/szabi-vaida
+    - network: linkedin
+      href: https://www.linkedin.com/in/szabolcs-levente-vaida-336457214/
+    - network: instagram
+      href: https://www.instagram.com/szabi.vaida/
+    - network: email
+      href: mailto:contact@szabivaida.dev
+pages:
+  - path: /
+    sections:
+      - type: hero
+        variant: split
+        heading: Szabi Vaida
+        actions:
+          - label: contact@szabivaida.dev
+            href: mailto:contact@szabivaida.dev
+          - label: GitHub
+            href: https://github.com/szabi-vaida
+        image:
+          src: https://media.licdn.com/dms/image/v2/D4E03AQFLlUaJpCCsQg/profile-displayphoto-crop_800_800/B4EZ7LCttYKoAI-/0/1781522948963?e=1793836800&v=beta&t=vKQsVyKOCBXB3XDLSpDAhgpSYrMNewRiWryabyQQk2A
+          alt: Szabi Vaida
+        backdrop: glow
+        intro: Full-Stack Developer · Sheffield, UK
+        points: []
+        tone: tinted
+      - type: about
+        variant: centred
+        id: about
+        heading: About
+        body: |-
+          I’m a Full-Stack Developer at Clear Links Technologies, where I maintain web applications across several areas, from student support and a job board platform to finance systems. That work has shown me how much effort goes into a site that simply does its job, and how much more effort goes into making it pretty. 
+
+          I made Forge for people like me: anyone who wants to build a website, or learn how one is put together, and end up with something that doesn’t just work but is a pleasure to look at too.
+        actions:
+          - label: Forge
+            href: https://en.wikipedia.org/wiki/Forge
+        tone: tinted
+      - type: timeline
+        variant: line
+        id: experience
+        heading: Experience
+        items:
+          - date: 2022 to present
+            title: Full-Stack Developer
+            place: Clear Links Technologies
+          - date: "2022"
+            title: QA Tester (part-time)
+            place: Proper QA
+          - date: 2021 - 2022
+            title: Self-Employed Programming Tutor
+        tone: tinted
+      - type: marquee
+        variant: double
+        id: skills
+        heading: Skills
+        items:
+          - text: C#
+            url: https://learn.microsoft.com/en-us/dotnet/csharp/
+          - text: C++
+            url: https://isocpp.org/get-started
+          - text: SQL
+            url: https://learn.microsoft.com/en-us/sql/t-sql/
+          - text: HTML5
+            url: https://developer.mozilla.org/en-US/docs/Web/HTML
+          - text: CSS3
+            url: https://www.w3.org/Style/CSS
+          - text: JavaScript
+            url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+          - text: .NET Core
+            url: https://docs.microsoft.com/en-us/dotnet/
+          - text: Azure
+            url: https://azure.microsoft.com/en-us/
+          - text: Node.js
+            url: https://nodejs.org/
+          - text: Git
+            url: https://git-scm.com/
+          - text: React
+            url: https://react.dev/
+        tone: tinted

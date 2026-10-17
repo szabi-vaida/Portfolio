@@ -1,0 +1,26 @@
+---
+// Webcore UI Masonry (MIT, Copyright (c) 2024 Frontendland), see CREDITS.md. It lays items out at build time, with no script.
+import WebcoreMasonry from '@webcore/Masonry/Masonry.astro';
+
+interface Props {
+  /** Each item is drawn by `component` with `props`. */
+  items: Array<{ component: unknown; props: Record<string, unknown> }>;
+}
+
+const { items } = Astro.props;
+---
+
+<div class="masonry">
+  <WebcoreMasonry items={items as never} element="div" columns={2} gap="var(--space-s)" className="masonry-narrow" />
+  <WebcoreMasonry items={items as never} element="div" columns={3} gap="var(--space-m)" className="masonry-wide" />
+</div>
+
+<style>
+  .masonry :global(.masonry-narrow > div),
+  .masonry :global(.masonry-wide > div) { flex: 1 1 0; min-width: 0; }
+  .masonry :global(.masonry-wide) { display: none !important; }
+  @media (min-width: 48rem) {
+    .masonry :global(.masonry-narrow) { display: none !important; }
+    .masonry :global(.masonry-wide) { display: flex !important; }
+  }
+</style>

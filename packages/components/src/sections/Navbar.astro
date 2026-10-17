@@ -1,0 +1,252 @@
+---
+import Button from '../primitives/Button.astro';
+import Icon from '../primitives/Icon.astro';
+import Image from '../primitives/Image.astro';
+import ThemeToggle from '../islands/ThemeToggle.astro';
+import { isCurrent, type SiteSpec } from '../lib/site';
+
+interface Props {
+  site: SiteSpec;
+  path: string;
+}
+
+const { site, path } = Astro.props;
+const { navbar } = site;
+const links = navbar.links ?? [];
+const toggle = site.theme.toggle === true;
+---
+
+<header class="navbar" data-variant={navbar.variant} data-sticky={navbar.sticky ? '' : undefined}>
+  <div class="navbar-inner container" data-size="wide">
+    <a class="brand" href="/" aria-label={`${site.meta.title}, home`}>
+      {
+        navbar.logo ? (
+          <Image image={navbar.logo} widths={[160, 320]} sizes="10rem" priority class="brand-logo" />
+        ) : (
+          <span class="brand-name">{site.meta.title}</span>
+        )
+      }
+    </a>
+
+    {
+      links.length > 0 && (
+        <>
+          <button class="menu-open" type="button" popovertarget="site-menu" aria-label="Open the menu">
+            <Icon name="menu" size={1.4} />
+          </button>
+          <nav id="site-menu" class="menu" popover aria-label="Main">
+            <button class="menu-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close the menu">
+              <Icon name="close" size={1.4} />
+            </button>
+            <ul role="list">
+              {links.map((link) => (
+                <li>
+                  <a href={link.href} aria-current={isCurrent(link.href, path) ? 'page' : undefined}>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {navbar.button && (
+              <div class="menu-button">
+                <Button href={navbar.button.href}>{navbar.button.label}</Button>
+              </div>
+            )}
+          </nav>
+        </>
+      )
+    }
+
+    <div class="actions">
+      {toggle && <ThemeToggle />}
+      {navbar.button && <Button href={navbar.button.href} class="desktop-button">{navbar.button.label}</Button>}
+    </div>
+  </div>
+</header>
+
+<style>
+  .navbar {
+    --pad: var(--space-s);
+    position: relative;
+    z-index: 20;
+    background: var(--color-background);
+    border-bottom: 1px solid transparent;
+    view-transition-name: forge-navbar;
+  }
+  .navbar[data-sticky] {
+    position: sticky;
+    top: 0;
+  }
+
+  .navbar-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-m);
+    min-height: var(--nav-height);
+    padding-block: var(--pad);
+    transition: padding 200ms var(--ease-out);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    text-decoration: none;
+    color: var(--color-text);
+  }
+  .brand-name {
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    font-size: var(--text-l);
+    letter-spacing: var(--heading-tracking);
+    line-height: 1;
+  }
+  .brand :global(.brand-logo) {
+    width: auto;
+    max-height: 2.5rem;
+    background: none;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    justify-self: end;
+  }
+
+  .menu ul {
+    display: flex;
+    gap: var(--space-2xs) var(--space-l);
+    margin: 0;
+  }
+  .menu a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 160ms var(--ease-out);
+  }
+  .menu a:hover,
+  .menu a[aria-current='page'] {
+    color: var(--color-text);
+  }
+  .menu a[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.45em;
+  }
+
+  .menu-open,
+  .menu-close {
+    display: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-button);
+    background: transparent;
+    color: var(--color-text);
+  }
+  .menu-button { display: none; }
+
+  /* Wide screens: the menu sits in the bar. Its popover behaviour only applies on small screens. */
+  @media (min-width: 56rem) {
+    .menu {
+      position: static;
+      inset: auto;
+      display: flex;
+      justify-content: flex-end;
+      width: auto;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: inherit;
+      overflow: visible;
+    }
+    /* Centred: the name sits alone in the middle with the menu on a row beneath it. */
+    .navbar[data-variant='centred'] .navbar-inner {
+      grid-template-columns: 1fr auto 1fr;
+      row-gap: 0;
+    }
+    .navbar[data-variant='centred'] .brand { grid-column: 2; grid-row: 1; }
+    .navbar[data-variant='centred'] .actions { grid-column: 3; grid-row: 1; }
+    .navbar[data-variant='centred'] .menu { grid-column: 1 / -1; grid-row: 2; justify-content: center; }
+    /* Split: menu on the left, name in the middle, button on the right. */
+    .navbar[data-variant='split'] .navbar-inner { grid-template-columns: 1fr auto 1fr; }
+    .navbar[data-variant='split'] .brand { grid-column: 2; grid-row: 1; }
+    .navbar[data-variant='split'] .menu { grid-column: 1; grid-row: 1; justify-content: flex-start; }
+    .navbar[data-variant='split'] .actions { grid-column: 3; grid-row: 1; }
+  }
+
+  /* Small screens: a menu button opens a full-height panel. The popover attribute gives focus handling and Escape for free. */
+  @media (max-width: 55.99rem) {
+    .navbar-inner { grid-template-columns: 1fr auto auto; }
+    .menu-open { display: grid; order: 3; }
+    .actions { order: 2; }
+    .actions :global(.desktop-button) { display: none; }
+    .menu {
+      inset: 0 0 0 auto;
+      width: min(24rem, 100%);
+      height: 100dvh;
+      max-height: none;
+      margin: 0;
+      padding: var(--space-l) var(--gutter) var(--space-xl);
+      border: 0;
+      border-left: 1px solid var(--hairline);
+      background: var(--color-background);
+      color: var(--color-text);
+      box-shadow: var(--shadow-l);
+    }
+    .menu:popover-open {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-l);
+    }
+    .menu::backdrop { background: rgb(0 0 0 / 0.35); }
+    .menu-close { display: grid; align-self: flex-end; }
+    .menu ul { flex-direction: column; gap: 0; }
+    .menu li + li { border-top: 1px solid var(--hairline); }
+    .menu a { display: flex; min-height: 3.25rem; font-size: var(--text-m); color: var(--color-text); }
+    .menu-button { display: block; }
+    .menu-button :global(.button) { width: 100%; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .menu:popover-open { animation: menu-in 280ms var(--ease-out); }
+      .menu:popover-open::backdrop { animation: fade-in 280ms var(--ease-out); }
+    }
+  }
+
+  @keyframes menu-in { from { transform: translateX(1.5rem); opacity: 0; } }
+  @keyframes fade-in { from { opacity: 0; } }
+
+  /* The bar tightens and gains a hairline once the page scrolls. Pure CSS, where scroll timelines exist. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      .navbar[data-sticky] {
+        animation-name: navbar-settle;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll();
+        animation-range: 0 8rem;
+      }
+      .navbar[data-sticky] .navbar-inner {
+        animation-name: navbar-shrink;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll();
+        animation-range: 0 8rem;
+      }
+    }
+  }
+  @keyframes navbar-settle {
+    to { border-bottom-color: var(--hairline); box-shadow: 0 10px 30px -24px rgb(0 0 0 / 0.5); }
+  }
+  @keyframes navbar-shrink {
+    to { min-height: 3.75rem; padding-block: var(--space-3xs); }
+  }
+</style>

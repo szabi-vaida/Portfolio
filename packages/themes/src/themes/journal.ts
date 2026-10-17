@@ -1,0 +1,41 @@
+import type { Theme } from '../types.ts';
+
+/** Paper white, forest green and a bookish serif pairing. For blogs and newsletters. */
+export const journal: Theme = {
+  label: 'Journal',
+  description: 'Paper white and forest green with a bookish serif pairing. Made for reading.',
+  fonts: { heading: 'Newsreader', body: 'Source Serif 4' },
+  headingWeight: 500,
+  headingTracking: -0.015,
+  light: {
+    background: '#fffefb',
+    tinted: '#f5f2ea',
+    surface: '#ffffff',
+    text: '#1b1b1b',
+    muted: '#5a5a55',
+    border: '#e4e0d6',
+    primary: '#2f4f3a',
+    'on-primary': '#ffffff',
+    accent: '#9a3412',
+    bold: '#1b1b1b',
+    'on-bold': '#fffefb',
+  },
+  dark: {
+    background: '#121311',
+    tinted: '#191a17',
+    surface: '#1e1f1c',
+    text: '#ecebe6',
+    muted: '#a7a69e',
+    border: '#2f302b',
+    primary: '#9cc5a8',
+    'on-primary': '#121311',
+    accent: '#f0a07a',
+    bold: '#ecebe6',
+    'on-bold': '#121311',
+  },
+  defaultMode: 'light',
+  corners: 'soft',
+  spacing: 'comfortable',
+  textSize: 'large',
+  shadow: 'none',
+};

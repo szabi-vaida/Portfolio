@@ -1,0 +1,64 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '@forge/components/layouts/BaseLayout.astro';
+import Sections from '@forge/components/layouts/Sections.astro';
+import BlogIndex from '@forge/components/layouts/BlogIndex.astro';
+import BlogPost from '@forge/components/layouts/BlogPost.astro';
+import Thanks from '@forge/components/layouts/Thanks.astro';
+import type { SiteSpec } from '@forge/schema';
+
+/**
+ * Every page of a Forge site comes from data: the pages in site.yaml, the blog index and posts
+ * when the site has a blog, and a thank-you page for forms unless the site has its own.
+ */
+export async function getStaticPaths() {
+  const entry = await getEntry('site', 'site');
+  if (!entry) throw new Error('The site collection is empty.');
+  const site = entry.data as SiteSpec;
+  const param = (p: string) => (p === '/' ? undefined : p.slice(1, -1));
+  const paths: Array<{ params: { path: string | undefined }; props: Record<string, unknown> }> = site.pages.map((page) => ({
+    params: { path: param(page.path) },
+    props: { kind: 'page', page },
+  }));
+
+  if (site.blog) {
+    const posts = (await getCollection('posts', (p) => !p.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+    paths.push({ params: { path: param(site.blog.path) }, props: { kind: 'blog' } });
+    for (const post of posts) {
+      paths.push({ params: { path: param(`${site.blog.path}${post.id}/`) }, props: { kind: 'post', post } });
+    }
+  }
+
+  if (!site.pages.some((p) => p.path === '/thanks/')) {
+    paths.push({ params: { path: 'thanks' }, props: { kind: 'thanks' } });
+  }
+  return paths;
+}
+
+const entry = await getEntry('site', 'site');
+const site = entry!.data as SiteSpec;
+const { kind, page, post } = Astro.props as {
+  kind: 'page' | 'blog' | 'post' | 'thanks';
+  page?: SiteSpec['pages'][number];
+  post?: Awaited<ReturnType<typeof getCollection<'posts'>>>[number];
+};
+const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const Content = post ? (await render(post)).Content : undefined;
+---
+
+{
+  kind === 'page' && page && (
+    <BaseLayout site={site} path={path} title={page.title} description={page.description}>
+      <Sections site={site} sections={page.sections} />
+    </BaseLayout>
+  )
+}
+{kind === 'blog' && <BlogIndex site={site} path={path} />}
+{
+  kind === 'post' && post && Content && (
+    <BlogPost site={site} path={path} post={post}>
+      <Content />
+    </BlogPost>
+  )
+}
+{kind === 'thanks' && <Thanks site={site} path={path} />}

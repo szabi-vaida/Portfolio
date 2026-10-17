@@ -1,0 +1,38 @@
+---
+import Button from '../primitives/Button.astro';
+import Container from '../primitives/Container.astro';
+import Heading from '../primitives/Heading.astro';
+
+interface Props {
+  heading: string;
+  text: string;
+  button?: { label: string; href: string };
+}
+
+const { heading, text, button = { label: 'Back to the home page', href: '/' } } = Astro.props;
+---
+
+<section class="message">
+  <Container size="narrow">
+    <Heading level={1} size="xl">{heading}</Heading>
+    <p>{text}</p>
+    <Button href={button.href} variant="secondary">{button.label}</Button>
+  </Container>
+</section>
+
+<style>
+  .message {
+    padding-block: clamp(4rem, 14vw, 9rem);
+    text-align: center;
+  }
+  .message :global(.container) {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-m);
+  }
+  .message p {
+    max-width: 44ch;
+    color: var(--color-muted);
+    font-size: var(--text-m);
+  }
+</style>

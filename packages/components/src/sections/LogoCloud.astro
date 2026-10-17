@@ -1,0 +1,67 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Image from '../primitives/Image.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'logo-cloud'>>;
+
+const { section, anchor, first } = Astro.props;
+const { variant, tone, heading, items } = section;
+---
+
+<Section anchor={anchor} tone={tone} first={first} class="logo-section">
+  {heading && <p class="logo-heading" id={`${anchor}-title`}>{heading}</p>}
+  <ul class="logos" data-variant={variant} role="list">
+    {
+      items.map((item) => {
+        const logo = <Image image={{ src: item.logo, alt: item.name }} widths={[160, 320]} sizes="10rem" class="logo" />;
+        return <li>{item.url ? <a href={item.url}>{logo}</a> : logo}</li>;
+      })
+    }
+  </ul>
+</Section>
+
+<style>
+  :global(.logo-section) { padding-block: clamp(2.5rem, 5vw, 4rem) !important; }
+  .logo-heading {
+    margin-bottom: var(--space-l);
+    color: var(--color-muted);
+    font-size: var(--text-s);
+    text-align: center;
+  }
+  /* A fixed height gives a lazy logo a box before it loads. With only max-height, a centred grid cell
+     shrinks it to nothing and the browser never starts the download. */
+  .logos :global(.logo) {
+    width: auto;
+    height: 2.5rem;
+    max-width: 9rem;
+    background: none;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.75;
+    transition: opacity 200ms var(--ease-out), filter 200ms var(--ease-out);
+  }
+  .logos a:hover :global(.logo), .logos li:hover :global(.logo) { filter: none; opacity: 1; }
+  .logos li { display: grid; place-items: center; }
+
+  .logos[data-variant='row'] {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-l) var(--space-2xl);
+  }
+  .logos[data-variant='grid'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    border-top: 1px solid var(--hairline);
+    border-left: 1px solid var(--hairline);
+  }
+  .logos[data-variant='grid'] li {
+    min-height: 7rem;
+    padding: var(--space-m);
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+</style>

@@ -1,0 +1,12 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '@forge/components/layouts/BaseLayout.astro';
+import Message from '@forge/components/layouts/Message.astro';
+import type { SiteSpec } from '@forge/schema';
+
+const site = (await getEntry('site', 'site'))!.data as SiteSpec;
+---
+
+<BaseLayout site={site} path="/404/" title="Page not found" noindex>
+  <Message heading="We could not find that page" text="The link may be old, or the address may have a typo. The home page is a good place to start." />
+</BaseLayout>

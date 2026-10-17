@@ -1,0 +1,127 @@
+---
+/**
+ * Opens gallery photos larger in a dialog, with previous and next buttons and arrow keys.
+ * Without JavaScript each photo is a plain link to the full image, so nothing is lost.
+ * Wrap links marked data-lightbox in an element marked data-lightbox-group.
+ */
+---
+
+<script>
+  const buttonClass = 'lightbox-button';
+
+  for (const group of document.querySelectorAll<HTMLElement>('[data-lightbox-group]')) {
+    const all = [...group.querySelectorAll<HTMLAnchorElement>('a[data-lightbox]')];
+    if (all.length === 0) continue;
+    let links = all;
+    let index = 0;
+    let trigger: HTMLAnchorElement | null = null;
+
+    const dialog = document.createElement('dialog');
+    dialog.className = 'lightbox';
+    dialog.setAttribute('aria-label', 'Photo viewer');
+    const figure = document.createElement('figure');
+    const img = document.createElement('img');
+    const caption = document.createElement('figcaption');
+    figure.append(img, caption);
+    const bar = document.createElement('div');
+    bar.className = 'lightbox-bar';
+    const make = (label: string, text: string) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = buttonClass;
+      b.setAttribute('aria-label', label);
+      b.textContent = text;
+      return b;
+    };
+    const prev = make('Previous photo', '←');
+    const next = make('Next photo', '→');
+    const close = make('Close', '×');
+    const count = document.createElement('span');
+    count.className = 'lightbox-count';
+    count.setAttribute('aria-live', 'polite');
+    bar.append(prev, count, next, close);
+    dialog.append(figure, bar);
+    document.body.append(dialog);
+
+    const show = (i: number) => {
+      index = (i + links.length) % links.length;
+      const link = links[index];
+      const thumb = link.querySelector('img');
+      img.src = link.href;
+      img.alt = thumb?.alt ?? '';
+      caption.textContent = link.dataset.caption ?? '';
+      caption.hidden = !link.dataset.caption;
+      count.textContent = `${index + 1} of ${links.length}`;
+      const single = links.length < 2;
+      prev.hidden = single;
+      next.hidden = single;
+    };
+
+    prev.addEventListener('click', () => show(index - 1));
+    next.addEventListener('click', () => show(index + 1));
+    close.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(index - 1);
+      if (e.key === 'ArrowRight') show(index + 1);
+    });
+    dialog.addEventListener('close', () => trigger?.focus());
+
+    for (const link of all) {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        trigger = link;
+        // Some layouts keep a second copy for another screen width. Only the copy on show takes part.
+        links = all.filter((l) => l.getClientRects().length > 0);
+        show(links.indexOf(link));
+        dialog.showModal();
+        close.focus();
+      });
+    }
+  }
+</script>
+
+<style is:global>
+  .lightbox {
+    width: min(92vw, 72rem);
+    max-height: 92vh;
+    padding: var(--space-s);
+    border: 0;
+    border-radius: var(--radius-m);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+  .lightbox::backdrop { background: rgb(0 0 0 / 0.78); }
+  .lightbox figure { margin: 0; }
+  .lightbox img {
+    width: 100%;
+    max-height: 74vh;
+    object-fit: contain;
+    border-radius: var(--radius-s);
+  }
+  .lightbox figcaption { margin-top: var(--space-xs); color: var(--color-muted); font-size: var(--text-s); }
+  .lightbox-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-xs);
+  }
+  .lightbox-count { min-width: 6rem; text-align: center; color: var(--color-muted); font-variant-numeric: tabular-nums; }
+  .lightbox-button {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-button);
+    background: transparent;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+  .lightbox-button:last-child { margin-left: auto; }
+  @media (prefers-reduced-motion: no-preference) {
+    .lightbox[open] { animation: lightbox-in 240ms var(--ease-out); }
+  }
+  @keyframes lightbox-in { from { opacity: 0; transform: scale(0.98); } }
+</style>

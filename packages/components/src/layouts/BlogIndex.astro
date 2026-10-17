@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Section from '../primitives/Section.astro';
+import PostList from '../parts/PostList.astro';
+import type { SiteSpec } from '../lib/site';
+
+interface Props {
+  site: SiteSpec;
+  path: string;
+}
+
+const { site, path } = Astro.props;
+const blog = site.blog!;
+const posts = (await getCollection('posts', (p) => !p.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout site={site} path={path} title={blog.title}>
+  <Section anchor="posts" heading={blog.title} first width="narrow">
+    <PostList posts={posts} base={blog.path} locale={site.meta.locale} variant="list" level={2} />
+  </Section>
+</BaseLayout>

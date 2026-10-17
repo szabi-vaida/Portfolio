@@ -1,0 +1,99 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'marquee'>>;
+
+const { section, anchor, first } = Astro.props;
+const { variant, tone, heading, items } = section;
+// The second band runs the words backwards, so the two rows never line up.
+const rows = variant === 'double' ? [items, [...items].reverse()] : [items];
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} first={first} width="wide" class="marquee-section">
+  <div class="marquee" data-variant={variant}>
+    {
+      rows.map((row, r) => (
+        <div class="band" data-row={r} aria-hidden={r > 0 ? 'true' : undefined}>
+          {/* The first copy is the real list. The second only fills the gap as the band slides. */}
+          <ul class="words" role="list">
+            {row.map((item) => (
+              <li>{item.url && r === 0 ? <a href={item.url}>{item.text}</a> : <span>{item.text}</span>}</li>
+            ))}
+          </ul>
+          <ul class="words copy" role="list" aria-hidden="true">
+            {row.map((item) => (
+              <li>
+                <span>{item.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  :global(.marquee-section) { overflow-x: clip; }
+  .marquee {
+    display: grid;
+    gap: var(--space-s);
+    /* Bleed to the edges of the window, past the container. */
+    margin-inline: calc(50% - 50vw);
+  }
+  .band { display: flex; }
+  .words {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2xs) var(--space-l);
+    padding-inline: var(--space-l);
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .words li { display: inline-flex; align-items: center; gap: var(--space-l); white-space: nowrap; }
+  /* A small dot in the accent colour between the words. */
+  .words li + li::before {
+    content: '';
+    width: 0.18em;
+    height: 0.18em;
+    border-radius: 50%;
+    background: var(--color-accent);
+  }
+  .words a { color: inherit; text-decoration: none; }
+  .words a:hover { color: var(--color-primary); text-decoration: underline; text-decoration-thickness: 0.06em; text-underline-offset: 0.12em; }
+  /* The second band is drawn in outline, so it reads as an echo of the first. */
+  .band[data-row='1'] .words { color: transparent; -webkit-text-stroke: 1px color-mix(in oklab, var(--color-text) 55%, transparent); }
+  .copy { display: none; }
+
+  /* Where the browser supports scroll-driven animation, the bands become one long line each and slide
+     sideways as the section passes through the window. Nothing moves unless the visitor scrolls. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .band { width: max-content; animation-name: marquee-slide; animation-timing-function: linear; animation-fill-mode: both; animation-timeline: view(); animation-range: cover; }
+      .band[data-row='1'] { animation-name: marquee-slide-back; }
+      .words { flex-wrap: nowrap; padding-inline: 0 var(--space-l); }
+      .words li:first-child::before {
+        content: '';
+        width: 0.18em;
+        height: 0.18em;
+        border-radius: 50%;
+        background: var(--color-accent);
+      }
+      .copy { display: flex; }
+    }
+  }
+  @keyframes marquee-slide {
+    from { transform: translateX(0); }
+    to { transform: translateX(-35%); }
+  }
+  @keyframes marquee-slide-back {
+    from { transform: translateX(-35%); }
+    to { transform: translateX(0); }
+  }
+</style>

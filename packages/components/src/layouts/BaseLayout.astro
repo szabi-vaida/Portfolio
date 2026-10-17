@@ -1,0 +1,113 @@
+---
+import '../styles/base.css';
+import { Font, getImage } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import { fontRequests, resolveTheme, themeCss } from '@forge/themes';
+import { letterFavicon } from '../lib/favicon';
+import { localImage } from '../lib/images';
+import { pageTitle, type SiteSpec } from '../lib/site';
+import Announcement from '../sections/Announcement.astro';
+import Navbar from '../sections/Navbar.astro';
+import Footer from '../sections/Footer.astro';
+
+interface Props {
+  site: SiteSpec;
+  /** The page path, such as / or /about/. */
+  path: string;
+  title?: string;
+  description?: string;
+  /** A page image for link previews. Falls back to the site image. */
+  image?: { src: string; alt: string };
+  /** article for blog posts, website for everything else. */
+  kind?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const { site, path, title, description, image, kind = 'website', noindex = false } = Astro.props;
+const { meta } = site;
+const resolved = resolveTheme(site.theme);
+const fonts = fontRequests(resolved);
+const css = themeCss(site.theme);
+const fullTitle = pageTitle(site, title);
+const desc = description ?? meta.description;
+const canonical = meta.url ? new URL(path, meta.url).href : undefined;
+
+// Link previews need an absolute image address. The image is cropped to 1200 by 630 and served from the site.
+let preview: { url: string; alt: string } | undefined;
+const previewImage = image ?? meta.image;
+if (previewImage && meta.url) {
+  const local = localImage(previewImage.src);
+  const src = local ?? (previewImage.src.startsWith('https://') ? previewImage.src : undefined);
+  if (src) {
+    const result = await getImage({ src, width: 1200, height: 630, format: 'jpeg', ...(local ? {} : { inferSize: true }) });
+    preview = { url: new URL(result.src, meta.url).href, alt: previewImage.alt };
+  }
+}
+
+const favicon = letterFavicon(meta.title, resolved.light.primary, resolved.light['on-primary']);
+
+const structured = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: meta.title,
+  description: meta.description,
+  ...(meta.url ? { url: meta.url } : {}),
+  inLanguage: meta.locale,
+};
+
+// In a Forge Studio preview the page names the draft it shows, so the editor knows when an edit has arrived.
+const studioPreview = process.env.FORGE_STUDIO_PREVIEW === '1';
+const draftVersion = studioPreview ? (((await getEntry('site', 'draft-version'))?.data as { value?: number } | undefined)?.value ?? 0) : 0;
+
+// Only the heading font is preloaded: it draws the largest text first. The body font follows a moment later.
+const preloadFont = (cssVariable: string) => cssVariable === '--ff-heading' || fonts.length === 1;
+
+const toggle = site.theme.toggle === true;
+// Runs before the first paint, so a visitor's saved choice never flashes the wrong colours.
+const prePaint = `try{var t=localStorage.getItem('forge-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`;
+// Decap invitations and password resets land on the site with a token in the address. Only then is the Netlify Identity widget loaded.
+const identity = `if(/(invite|recovery|confirmation|email_change)_token/.test(location.hash)){var s=document.createElement('script');s.src='https://identity.netlify.com/v1/netlify-identity-widget.js';document.head.appendChild(s)}`;
+---
+
+<!doctype html>
+<html lang={meta.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="generator" content="Forge" />
+    <link rel="icon" href={favicon} />
+    {meta.url && <link rel="sitemap" href="/sitemap-index.xml" />}
+    <meta name="theme-color" content={resolved.mode === 'dark' ? resolved.dark.background : resolved.light.background} />
+
+    <meta property="og:type" content={kind} />
+    <meta property="og:site_name" content={meta.title} />
+    <meta property="og:title" content={title ?? meta.title} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:locale" content={meta.locale.replace('-', '_')} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {preview && <meta property="og:image" content={preview.url} />}
+    {preview && <meta property="og:image:alt" content={preview.alt} />}
+    <meta name="twitter:card" content={preview ? 'summary_large_image' : 'summary'} />
+
+    {fonts.map((f) => <Font cssVariable={f.cssVariable} preload={preloadFont(f.cssVariable)} />)}
+    <style is:inline set:html={css}></style>
+    {toggle && <script is:inline set:html={prePaint} />}
+    <script is:inline set:html={identity} />
+    <script type="application/ld+json" set:html={JSON.stringify(structured)} />
+    {studioPreview && <meta name="forge-draft-version" content={String(draftVersion)} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    {site.announcement && <Announcement announcement={site.announcement} />}
+    <Navbar site={site} path={path} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer site={site} />
+  </body>
+</html>

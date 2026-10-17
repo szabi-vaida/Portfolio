@@ -1,0 +1,49 @@
+/* Form fields share one look. Imported by the sections that hold a form. */
+.field {
+  display: grid;
+  gap: var(--space-3xs);
+}
+.field label {
+  font-weight: 600;
+  font-size: var(--text-s);
+}
+.field .required {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid color-mix(in oklab, var(--color-text) 35%, transparent);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+.field textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+.field input:hover,
+.field textarea:hover,
+.field select:hover {
+  border-color: color-mix(in oklab, var(--color-text) 60%, transparent);
+}
+.field input:focus-visible,
+.field textarea:focus-visible,
+.field select:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 25%, transparent);
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--color-muted);
+}
+.field input:user-invalid,
+.field textarea:user-invalid {
+  border-color: #c2410c;
+}

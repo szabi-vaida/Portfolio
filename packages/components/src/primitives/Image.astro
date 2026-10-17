@@ -1,0 +1,81 @@
+---
+import { Image as AstroImage, Picture, inferRemoteSize } from 'astro:assets';
+import { localImage } from '../lib/images';
+
+interface Props {
+  image: { src: string; alt: string };
+  /** The widths to generate, in pixels. */
+  widths?: number[];
+  /** How wide the image shows at each screen size, as in the HTML sizes attribute. */
+  sizes?: string;
+  /** Crop to this shape, such as 4/3 or 1/1. Without it the image keeps its own shape. */
+  ratio?: string;
+  /** Load at once and ask for it first. Use for the first large image on a page only. */
+  priority?: boolean;
+  class?: string;
+}
+
+const { image, widths = [480, 800, 1200, 1600], sizes = '(min-width: 74rem) 74rem, 100vw', ratio, priority = false, class: className } = Astro.props;
+
+const local = localImage(image.src);
+const remote = image.src.startsWith('https://');
+if (!local && !remote) {
+  throw new Error(`Image not found: ${image.src}. Put the file in the site's images folder, or use a full https link.`);
+}
+// Local and remote images both go through astro:assets: resized, converted to AVIF and WebP, and served from the site.
+const source = local ?? image.src;
+const svg = local?.format === 'svg' || /\.svg(\?|$)/i.test(image.src);
+const size = local ?? (svg ? undefined : await inferRemoteSize(image.src));
+
+// With a ratio, the files themselves are cropped to that shape, so no pixels are sent only to be hidden.
+let crop: { width: number; height: number } | undefined;
+let generate = widths;
+if (size) {
+  let width = size.width;
+  if (ratio) {
+    const [a, b] = ratio.split('/').map(Number);
+    const r = a / b;
+    width = Math.min(size.width, Math.round(size.height * r));
+    crop = { width, height: Math.round(width / r) };
+  } else {
+    crop = { width: size.width, height: size.height };
+  }
+  generate = widths.filter((w) => w < width).concat([width]);
+}
+
+const style = ratio ? `aspect-ratio:${ratio}` : undefined;
+const loading = priority ? 'eager' : 'lazy';
+const fetchpriority = priority ? 'high' : undefined;
+const classes = ['forge-image', className].filter(Boolean).join(' ');
+---
+
+{
+  svg ? (
+    <AstroImage src={source as never} alt={image.alt} class={classes} style={style} loading={loading} fetchpriority={fetchpriority} inferSize={!local} />
+  ) : (
+    <Picture
+      src={source as never}
+      alt={image.alt}
+      {...crop}
+      widths={generate}
+      sizes={sizes}
+      formats={['avif', 'webp']}
+      fallbackFormat={local ? undefined : 'jpg'}
+      class={classes}
+      style={style}
+      loading={loading}
+      decoding="async"
+      fetchpriority={fetchpriority}
+    />
+  )
+}
+
+<style>
+  /* Global, because the img element is drawn by astro:assets, outside this component's scope. */
+  :global(.forge-image) {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    background: var(--color-tinted);
+  }
+</style>

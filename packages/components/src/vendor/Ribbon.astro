@@ -1,0 +1,21 @@
+---
+// Webcore UI Ribbon (MIT, Copyright (c) 2024 Frontendland), see CREDITS.md. Pure CSS, no script.
+// It folds over the left edge of the nearest positioned parent, so that parent must not clip its overflow.
+import WebcoreRibbon from '@webcore/Ribbon/Ribbon.astro';
+---
+
+<WebcoreRibbon type="folded" className="ribbon"><slot /></WebcoreRibbon>
+
+<style>
+  :global(.ribbon) {
+    --w-color-primary: var(--color-accent);
+    --w-color-primary-70: var(--color-background);
+    --w-color-primary-20: color-mix(in oklab, var(--color-accent) 55%, #000);
+    --w-ribbon-folded-offset: 0.6rem;
+    padding-block: 0.3rem;
+    font-size: var(--text-xs) !important;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+</style>

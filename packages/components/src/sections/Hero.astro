@@ -1,0 +1,246 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Button from '../primitives/Button.astro';
+import Container from '../primitives/Container.astro';
+import Heading from '../primitives/Heading.astro';
+import Icon from '../primitives/Icon.astro';
+import Image from '../primitives/Image.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'hero'>>;
+
+const { section, anchor, first } = Astro.props;
+const { variant, heading, intro, actions = [], image, points = [] } = section;
+// The photo background needs a photo. Without one it becomes a bold band.
+const look = variant === 'image-background' && !image ? 'centred' : variant;
+const tone = variant === 'image-background' && !image ? 'bold' : section.tone;
+const level = first ? 1 : 2;
+// The centred layout has always carried a faint dot grid, so an empty backdrop keeps it.
+const backdrop = look === 'image-background' ? 'none' : (section.backdrop ?? (look === 'centred' ? 'grid' : 'none'));
+---
+
+<section id={anchor} class="hero" data-variant={look} data-backdrop={backdrop} data-tone={look === 'image-background' ? 'bold' : tone} aria-labelledby={`${anchor}-title`}>
+  {
+    look === 'image-background' && image && (
+      <div class="hero-backdrop">
+        <Image image={image} sizes="100vw" widths={[640, 960, 1280, 1920, 2560]} priority={first} />
+      </div>
+    )
+  }
+  <Container size={look === 'centred' ? 'narrow' : 'wide'} class="hero-grid">
+    <div class="hero-copy">
+      <Heading level={level} size="display" id={`${anchor}-title`}>{heading}</Heading>
+      {intro && <p class="hero-intro">{intro}</p>}
+      {
+        actions.length > 0 && (
+          <div class="hero-actions">
+            {actions.map((a, i) => (
+              <Button href={a.href} variant={i === 0 ? 'primary' : 'secondary'} size="l">
+                {a.label}
+              </Button>
+            ))}
+          </div>
+        )
+      }
+      {
+        points.length > 0 && (
+          <ul class="hero-points" role="list">
+            {points.map((p) => (
+              <li>
+                <Icon name="check" size={1.1} />
+                {p}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+    {
+      look !== 'image-background' && image && (
+        <div class="hero-media">
+          <Image
+            image={image}
+            ratio={look === 'split' ? '4/5' : '16/9'}
+            sizes={look === 'split' ? '(min-width: 56rem) 40vw, 100vw' : '(min-width: 48rem) 44rem, 100vw'}
+            priority={first}
+          />
+        </div>
+      )
+    }
+  </Container>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: clamp(3rem, 8vw, 7rem);
+    overflow: clip;
+  }
+  .hero[data-tone='plain'] {
+    background: linear-gradient(180deg, var(--color-tinted), var(--color-background) 80%);
+  }
+  /* Grid: a faint dot grid fades out from behind the words, so a hero without a photo still has texture. */
+  .hero[data-backdrop='grid']::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(color-mix(in oklab, var(--color-text) 16%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(ellipse 60% 70% at 50% 35%, #000 10%, transparent 75%);
+    pointer-events: none;
+  }
+  .hero[data-variant='split'][data-backdrop='grid']::before {
+    mask-image: radial-gradient(ellipse 55% 75% at 20% 40%, #000 10%, transparent 75%);
+  }
+
+  /* Glow: two soft pools of the theme colours behind the words. They drift and fade as the hero
+     scrolls away, so the page moves only when the visitor does. */
+  .hero[data-backdrop='glow']::before {
+    content: '';
+    position: absolute;
+    inset: -20% -10% 0;
+    background:
+      radial-gradient(55% 65% at 20% 25%, color-mix(in oklab, var(--color-primary) 26%, transparent), transparent 72%),
+      radial-gradient(50% 60% at 82% 15%, color-mix(in oklab, var(--color-accent) 22%, transparent), transparent 72%);
+    pointer-events: none;
+  }
+
+  .hero :global(.hero-grid) {
+    position: relative;
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .hero-copy {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-m);
+  }
+  .hero-copy :global(h1),
+  .hero-copy :global(h2) {
+    max-width: 16ch;
+  }
+  .hero-intro {
+    max-width: 48ch;
+    color: var(--color-muted);
+    font-size: var(--text-m);
+    line-height: 1.55;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-xs);
+  }
+  .hero-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-l);
+    margin-top: var(--space-xs);
+    color: var(--color-muted);
+    font-size: var(--text-s);
+  }
+  .hero-points li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+  .hero-points :global(svg) { color: var(--color-accent); }
+
+  .hero-media {
+    border-radius: var(--radius-l);
+    overflow: hidden;
+    box-shadow: var(--shadow-l);
+  }
+
+  /* Split: words on the left, a tall photo on the right. */
+  @media (min-width: 56rem) {
+    .hero[data-variant='split'] :global(.hero-grid) {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: var(--space-2xl);
+    }
+  }
+
+  /* Centred: a calm column with the photo underneath. */
+  .hero[data-variant='centred'] .hero-copy {
+    justify-items: center;
+    text-align: center;
+  }
+  .hero[data-variant='centred'] .hero-actions,
+  .hero[data-variant='centred'] .hero-points { justify-content: center; }
+  .hero[data-variant='centred'] .hero-media { margin-top: var(--space-l); }
+
+  /* Photo background: the photo fills the band and a gradient keeps the words readable. */
+  .hero[data-variant='image-background'] {
+    display: grid;
+    align-items: end;
+    min-height: min(88vh, 52rem);
+    padding-block: var(--space-3xl) var(--space-2xl);
+    background: var(--color-bold);
+    color: var(--color-on-bold);
+  }
+  .hero-backdrop {
+    position: absolute;
+    inset: 0;
+  }
+  .hero-backdrop :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.15) 0%, rgb(0 0 0 / 0.1) 35%, rgb(0 0 0 / 0.72) 100%),
+      linear-gradient(90deg, rgb(0 0 0 / 0.45), transparent 70%);
+  }
+  .hero[data-variant='image-background'] .hero-copy,
+  .hero[data-variant='image-background'] .hero-intro,
+  .hero[data-variant='image-background'] .hero-points { color: #fff; }
+  .hero[data-variant='image-background'] :global(.button[data-variant='primary']) { background: #fff; color: #111; }
+  .hero[data-variant='image-background'] :global(.button[data-variant='secondary']) { border-color: rgb(255 255 255 / 0.6); color: #fff; }
+  .hero[data-variant='image-background'] .hero-points :global(svg) { color: #fff; }
+
+  /* The one authored moment on a page: the heading settles and the photo opens like a shutter. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-copy > :global(*) {
+      animation: hero-rise 700ms var(--ease-out) both;
+    }
+    .hero-copy > :global(*:nth-child(2)) { animation-delay: 70ms; }
+    .hero-copy > :global(*:nth-child(3)) { animation-delay: 140ms; }
+    .hero-copy > :global(*:nth-child(4)) { animation-delay: 210ms; }
+    .hero-media {
+      animation: hero-open 900ms var(--ease-out) 120ms both;
+    }
+    .hero-backdrop :global(img) {
+      animation: hero-settle 1400ms var(--ease-out) both;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .hero[data-backdrop='glow']::before {
+        animation-name: hero-glow;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 100%;
+      }
+    }
+  }
+  @keyframes hero-glow {
+    to { transform: translateY(-12%) scale(1.15); opacity: 0.2; }
+  }
+  @keyframes hero-rise {
+    from { transform: translateY(0.75rem); }
+  }
+  @keyframes hero-open {
+    from { clip-path: inset(6% 6% 6% 6% round var(--radius-l)); }
+    to { clip-path: inset(0 0 0 0 round var(--radius-l)); }
+  }
+  @keyframes hero-settle {
+    from { transform: scale(1.06); }
+  }
+</style>

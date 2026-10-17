@@ -1,0 +1,16 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Message from './Message.astro';
+import type { SiteSpec } from '../lib/site';
+
+interface Props {
+  site: SiteSpec;
+  path: string;
+}
+
+const { site, path } = Astro.props;
+---
+
+<BaseLayout site={site} path={path} title="Thank you" noindex>
+  <Message heading="Thank you, we have it" text="Your form has been sent. If you asked a question, we will reply soon. If it is urgent, the contact details on this site are the quickest way to reach us." />
+</BaseLayout>

@@ -1,0 +1,41 @@
+import type { Theme } from '../types.ts';
+
+/** Calm navy and warm sand with a soft serif. For trades, clinics, consultants and other services. */
+export const harbour: Theme = {
+  label: 'Harbour',
+  description: 'Calm navy and warm sand with a friendly serif. Steady and trustworthy.',
+  fonts: { heading: 'Fraunces', body: 'Public Sans' },
+  headingWeight: 600,
+  headingTracking: -0.02,
+  light: {
+    background: '#fbfaf7',
+    tinted: '#f1eee7',
+    surface: '#ffffff',
+    text: '#16202e',
+    muted: '#4f5b69',
+    border: '#ddd8cd',
+    primary: '#1f4e79',
+    'on-primary': '#ffffff',
+    accent: '#a3491f',
+    bold: '#16202e',
+    'on-bold': '#f4efe6',
+  },
+  dark: {
+    background: '#0f151d',
+    tinted: '#151d28',
+    surface: '#1a2431',
+    text: '#eef1f4',
+    muted: '#a9b4c0',
+    border: '#2a3646',
+    primary: '#8db8e3',
+    'on-primary': '#0f151d',
+    accent: '#e59a6d',
+    bold: '#f4efe6',
+    'on-bold': '#16202e',
+  },
+  defaultMode: 'light',
+  corners: 'soft',
+  spacing: 'comfortable',
+  textSize: 'medium',
+  shadow: 'soft',
+};

@@ -1,0 +1,17 @@
+{
+  "name": "@forge/site",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
+    "@forge/catalogue": "*",
+    "@forge/components": "*",
+    "@forge/decap": "*",
+    "@forge/schema": "*",
+    "@forge/themes": "*",
+    "astro": "7.3.8",
+    "sass": "1.105.1"
+  }
+}

@@ -1,0 +1,153 @@
+---
+import Icon from '../primitives/Icon.astro';
+import type { SiteSpec } from '../lib/site';
+
+interface Props {
+  site: SiteSpec;
+}
+
+const { site } = Astro.props;
+const { footer, meta } = site;
+const year = new Date().getFullYear();
+const columns = footer.variant === 'columns' || footer.variant === 'split' ? (footer.columns ?? []) : [];
+const SOCIAL_LABELS: Record<string, string> = {
+  instagram: 'Instagram',
+  facebook: 'Facebook',
+  linkedin: 'LinkedIn',
+  x: 'X',
+  youtube: 'YouTube',
+  tiktok: 'TikTok',
+  github: 'GitHub',
+  mastodon: 'Mastodon',
+  email: 'Email',
+};
+---
+
+<footer class="footer" data-variant={footer.variant} data-tone="tinted">
+  <div class="container footer-inner" data-size="wide">
+    <div class="footer-brand">
+      <p class="footer-name">{meta.title}</p>
+      {footer.text && <p class="footer-text">{footer.text}</p>}
+      {
+        footer.social && footer.social.length > 0 && (
+          <ul class="social" role="list">
+            {footer.social.map((s) => (
+              <li>
+                <a href={s.href} rel={s.href.startsWith('http') ? 'me noopener' : undefined}>
+                  <Icon name={s.network} label={SOCIAL_LABELS[s.network]} size={1.3} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    {
+      columns.length > 0 && (
+        <nav class="footer-columns" aria-label="Footer">
+          {columns.map((col) => (
+            <div>
+              <p class="footer-heading">{col.title}</p>
+              <ul role="list">
+                {col.links.map((link) => (
+                  <li>
+                    <a href={link.href}>{link.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+      )
+    }
+  </div>
+  <div class="container footer-bottom" data-size="wide">
+    <p>© {year} {meta.title}</p>
+    {footer.smallPrint && <p>{footer.smallPrint}</p>}
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: auto;
+    padding-block: var(--space-2xl) var(--space-l);
+    border-top: 1px solid var(--hairline);
+    color: var(--color-text);
+    font-size: var(--text-s);
+  }
+  .footer-inner {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .footer-name {
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    font-size: var(--text-l);
+    letter-spacing: var(--heading-tracking);
+    line-height: 1.1;
+  }
+  .footer-text {
+    margin-top: var(--space-xs);
+    max-width: 38ch;
+    color: var(--color-muted);
+  }
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+    margin-top: var(--space-m);
+  }
+  .social a {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    color: var(--color-muted);
+    transition: color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+  }
+  .social a:hover { color: var(--color-text); background: var(--color-background); }
+
+  .footer-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: var(--space-l);
+  }
+  .footer-heading {
+    font-weight: 600;
+    margin-bottom: var(--space-2xs);
+  }
+  .footer-columns a {
+    display: inline-block;
+    padding-block: 0.4rem;
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .footer-columns a:hover { color: var(--color-text); text-decoration: underline; }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-l);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--hairline);
+    color: var(--color-muted);
+    font-size: var(--text-xs);
+  }
+
+  /* Simple: everything centred in one column. */
+  .footer[data-variant='simple'] .footer-inner { justify-items: center; text-align: center; }
+  .footer[data-variant='simple'] .footer-text { margin-inline: auto; }
+  .footer[data-variant='simple'] .social { justify-content: center; }
+  .footer[data-variant='simple'] .footer-bottom { justify-content: center; }
+
+  @media (min-width: 48rem) {
+    .footer[data-variant='columns'] .footer-inner { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+    /* Split: a large name on the left balances the link columns on the right. */
+    .footer[data-variant='split'] .footer-inner { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: end; }
+    .footer[data-variant='split'] .footer-name { font-size: var(--text-3xl); }
+  }
+</style>

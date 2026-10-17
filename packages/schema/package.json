@@ -1,0 +1,9 @@
+{
+  "name": "@forge/schema",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": { ".": "./src/index.ts", "./paths": "./src/paths.ts" },
+  "dependencies": { "@forge/themes": "*", "yaml": "^2", "zod": "^4.6.5" }
+}

@@ -1,0 +1,41 @@
+---
+import { ICONS, type IconKey } from '../lib/icons';
+
+interface Props {
+  name: IconKey;
+  /** Size in em, so the icon follows the text around it. */
+  size?: number;
+  /** A label makes the icon an image for screen readers. Without one it is hidden as decoration. */
+  label?: string;
+  class?: string;
+}
+
+const { name, size = 1.25, label, class: className } = Astro.props;
+---
+
+<svg
+  class:list={['icon', className]}
+  viewBox="0 0 24 24"
+  width="24"
+  height="24"
+  style={`--icon-size:${size}em`}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+>
+  <path d={ICONS[name]}></path>
+</svg>
+
+<style>
+  .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    flex: none;
+  }
+</style>

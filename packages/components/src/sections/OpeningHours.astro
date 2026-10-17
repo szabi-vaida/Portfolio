@@ -1,0 +1,109 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Button from '../primitives/Button.astro';
+import Heading from '../primitives/Heading.astro';
+import Icon from '../primitives/Icon.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'opening-hours'>>;
+
+const { section, anchor, first } = Astro.props;
+// Item titles sit one level below the section heading, which is the h1 when the section opens the page.
+const H = first ? 'h2' : 'h3';
+const { variant, tone, heading, intro, hours, address, phone, email, mapUrl } = section;
+---
+
+<Section anchor={anchor} tone={tone} heading={variant === 'card' ? heading : undefined} intro={variant === 'card' ? intro : undefined} align="split" first={first}>
+  <div class="visit" data-variant={variant}>
+    {
+      variant === 'strip' && (
+        <div class="visit-head">
+          <Heading level={first ? 1 : 2} size="l" id={`${anchor}-title`}>{heading}</Heading>
+          {intro && <p>{intro}</p>}
+        </div>
+      )
+    }
+    <div class="hours">
+      <H class="visit-label">
+        <Icon name="clock" /> Opening hours
+      </H>
+      <table>
+        <tbody>
+          {hours.map((h) => (
+            <tr>
+              <th scope="row">{h.days}</th>
+              <td>{h.time}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    {
+      (address || phone || email) && (
+        <div class="find">
+          <H class="visit-label">
+            <Icon name="pin" /> Find us
+          </H>
+          <address>
+            {address && <p class="address">{address}</p>}
+            {phone && (
+              <p>
+                <a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a>
+              </p>
+            )}
+            {email && (
+              <p>
+                <a href={`mailto:${email}`}>{email}</a>
+              </p>
+            )}
+          </address>
+          {mapUrl && <Button href={mapUrl} variant="quiet" icon="arrow-up-right">Get directions</Button>}
+        </div>
+      )
+    }
+  </div>
+</Section>
+
+<style>
+  .visit-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: var(--space-s);
+    font-family: var(--font-body);
+    font-size: var(--text-s);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .visit-label :global(svg) { color: var(--color-accent); }
+  table { width: 100%; }
+  th, td { padding-block: var(--space-2xs); border-bottom: 1px solid var(--hairline); text-align: left; }
+  th { font-weight: 500; padding-right: var(--space-m); }
+  td { text-align: right; font-variant-numeric: tabular-nums; }
+  address { font-style: normal; display: grid; gap: var(--space-3xs); margin-bottom: var(--space-xs); }
+  .address { white-space: pre-line; font-size: var(--text-m); }
+  address a { text-decoration: none; }
+  address a:hover { text-decoration: underline; }
+
+  /* Card: hours and address side by side in one raised panel. */
+  .visit[data-variant='card'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-xl);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border-radius: var(--radius-l);
+    background: var(--color-surface);
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-s);
+  }
+
+  /* Strip: heading, hours and address in one row, for the bottom of a page. */
+  .visit[data-variant='strip'] { display: grid; gap: var(--space-xl); }
+  .visit-head p { margin-top: var(--space-xs); color: var(--color-muted); }
+  @media (min-width: 56rem) {
+    .visit[data-variant='strip'] { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 0.9fr); gap: var(--space-2xl); }
+  }
+</style>

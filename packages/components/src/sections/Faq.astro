@@ -1,0 +1,115 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Heading from '../primitives/Heading.astro';
+import Markdown from '../primitives/Markdown.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'faq'>>;
+
+const { section, anchor, first } = Astro.props;
+const { variant, tone, heading, intro, items } = section;
+const twoColumn = variant === 'two-column';
+---
+
+<Section anchor={anchor} tone={tone} heading={twoColumn ? undefined : heading} intro={twoColumn ? undefined : intro} width={variant === 'accordion' ? 'narrow' : 'default'} first={first}>
+  <div class="faq" data-variant={variant}>
+    {
+      twoColumn && (
+        <div class="faq-head">
+          <Heading level={first ? 1 : 2} size="xl" id={`${anchor}-title`}>{heading}</Heading>
+          {intro && <p class="faq-intro">{intro}</p>}
+        </div>
+      )
+    }
+    {
+      variant === 'list' ? (
+        <dl class="faq-list">
+          {items.map((item) => (
+            <div class="faq-item">
+              <dt>{item.question}</dt>
+              <dd>
+                <Markdown text={item.answer} look="compact" />
+              </dd>
+            </div>
+          ))}
+        </dl>
+      ) : (
+        <div class="faq-accordion">
+          {items.map((item) => (
+            <details name={`${anchor}-questions`}>
+              <summary>{item.question}</summary>
+              <div class="answer">
+                <Markdown text={item.answer} look="compact" />
+              </div>
+            </details>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</Section>
+
+<style>
+  /* List: every answer open, in two columns on wide screens. Good for a handful of short answers. */
+  .faq-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: var(--space-xl) var(--space-2xl);
+  }
+  .faq-item dt {
+    font-weight: 600;
+    font-size: var(--text-m);
+    margin-bottom: var(--space-2xs);
+  }
+
+  /*
+   * Accordion: native details elements, one open at a time through the shared name.
+   * It needs no script, works with the keyboard, and the browser's find-in-page opens the right answer.
+   */
+  .faq-accordion details {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .faq-accordion details:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+  summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-m);
+    min-height: 3.5rem;
+    padding-block: var(--space-s);
+    font-weight: 600;
+    font-size: var(--text-m);
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '';
+    flex: none;
+    width: 0.6rem;
+    height: 0.6rem;
+    border: solid var(--color-muted);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translateY(-3px);
+    transition: transform 220ms var(--ease-out);
+  }
+  details[open] summary::after { transform: rotate(-135deg) translateY(-3px); }
+  summary:hover { color: var(--color-primary); }
+  .answer { padding-bottom: var(--space-m); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    details[open] .answer { animation: answer-in 260ms var(--ease-out); }
+  }
+  @keyframes answer-in { from { opacity: 0; transform: translateY(-4px); } }
+
+  /* Two columns: the heading stays on the left, the questions open on the right. */
+  .faq[data-variant='two-column'] { display: grid; gap: var(--space-xl); }
+  .faq-intro { margin-top: var(--space-s); color: var(--color-muted); font-size: var(--text-m); max-width: 36ch; }
+  @media (min-width: 56rem) {
+    .faq[data-variant='two-column'] { grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); gap: var(--space-3xl); align-items: start; }
+    .faq-head { position: sticky; top: calc(var(--nav-height) + var(--space-l)); }
+  }
+</style>

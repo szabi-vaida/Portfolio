@@ -1,0 +1,96 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon from './Icon.astro';
+import type { IconKey } from '../lib/icons';
+
+type Props = {
+  /** With href the button is a link. Without it, a real button. */
+  href?: string;
+  /** primary for the one main action, secondary for the rest, quiet for a plain text link with an arrow. */
+  variant?: 'primary' | 'secondary' | 'quiet';
+  size?: 'm' | 'l';
+  icon?: IconKey;
+  type?: 'button' | 'submit';
+  class?: string;
+} & Omit<HTMLAttributes<'button'>, 'type' | 'class'>;
+
+const { href, variant = 'primary', size = 'm', icon, type = 'button', class: className, ...rest } = Astro.props;
+const external = href?.startsWith('http');
+const trailing = icon ?? (variant === 'quiet' ? 'arrow-right' : undefined);
+---
+
+{
+  href ? (
+    <a
+      class:list={['button', className]}
+      data-variant={variant}
+      data-size={size}
+      href={href}
+      rel={external ? 'noopener' : undefined}
+    >
+      <span><slot /></span>
+      {trailing && <Icon name={trailing} size={1.1} />}
+    </a>
+  ) : (
+    <button class:list={['button', className]} data-variant={variant} data-size={size} type={type} {...rest}>
+      <span><slot /></span>
+      {trailing && <Icon name={trailing} size={1.1} />}
+    </button>
+  )
+}
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    min-height: 2.875rem;
+    padding: 0.7em 1.35em;
+    border: 1px solid transparent;
+    border-radius: var(--radius-button);
+    font-weight: 600;
+    font-size: var(--text-base);
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color 180ms var(--ease-out),
+      border-color 180ms var(--ease-out),
+      box-shadow 180ms var(--ease-out),
+      transform 180ms var(--ease-out);
+  }
+  .button[data-size='l'] { min-height: 3.25rem; padding-inline: 1.65em; font-size: var(--text-m); }
+
+  .button[data-variant='primary'] {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    box-shadow: var(--shadow-s);
+  }
+  .button[data-variant='primary']:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+  .button[data-variant='secondary'] {
+    border-color: color-mix(in oklab, var(--color-text) 30%, transparent);
+    color: inherit;
+    background: transparent;
+  }
+  .button[data-variant='secondary']:hover { border-color: currentColor; }
+
+  .button[data-variant='quiet'] {
+    min-height: 2.75rem;
+    padding-inline: 0;
+    border-radius: 0;
+    color: inherit;
+  }
+  .button[data-variant='quiet'] span { text-decoration: underline; text-decoration-color: color-mix(in oklab, currentColor 35%, transparent); text-underline-offset: 0.3em; }
+  .button[data-variant='quiet']:hover span { text-decoration-color: currentColor; }
+  .button[data-variant='quiet'] :global(svg) { transition: transform 180ms var(--ease-out); }
+  .button[data-variant='quiet']:hover :global(svg) { transform: translateX(3px); }
+
+  .button:active { transform: translateY(0) scale(0.98); transition-duration: 80ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .button, .button[data-variant='quiet'] :global(svg) { transition: none; }
+    .button:hover, .button:active, .button[data-variant='quiet']:hover :global(svg) { transform: none; }
+  }
+</style>

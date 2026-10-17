@@ -1,0 +1,102 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Icon from '../primitives/Icon.astro';
+import Image from '../primitives/Image.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'projects'>>;
+
+const { section, anchor, first } = Astro.props;
+// Item titles sit one level below the section heading, which is the h1 when the section opens the page.
+const H = first ? 'h2' : 'h3';
+const { variant, tone, heading, intro, items } = section;
+const ratioFor = (i: number) => {
+  if (variant === 'list') return '3/2';
+  if (variant === 'featured') return i === 0 ? '16/9' : '4/3';
+  // Grid: alternate tall and wide crops so the rows have rhythm.
+  return i % 3 === 0 ? '4/5' : '4/3';
+};
+const sizesFor = (i: number) =>
+  variant === 'featured' && i === 0 ? '(min-width: 74rem) 74rem, 100vw' : variant === 'list' ? '(min-width: 56rem) 50vw, 100vw' : '(min-width: 56rem) 33vw, 100vw';
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} intro={intro} align="split" width={variant === 'grid' ? 'wide' : 'default'} first={first}>
+  <ul class="projects" data-variant={variant} role="list">
+    {
+      items.map((item, i) => (
+        <li class="project">
+          <div class="project-media">
+            <Image image={item.image} ratio={ratioFor(i)} sizes={sizesFor(i)} widths={[480, 800, 1200, 1600]} />
+          </div>
+          <div class="project-body">
+            {item.category && <p class="project-category">{item.category}</p>}
+            <H>
+              {item.url ? (
+                <a href={item.url}>
+                  {item.title}
+                  <Icon name="arrow-up-right" size={0.9} />
+                </a>
+              ) : (
+                item.title
+              )}
+            </H>
+            {item.text && <p class="project-text">{item.text}</p>}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</Section>
+
+<style>
+  .project { position: relative; }
+  .project-media { border-radius: var(--radius-m); overflow: hidden; background: var(--color-tinted); }
+  .project-media :global(img) { transition: transform 700ms var(--ease-out); }
+  .project:hover .project-media :global(img) { transform: scale(1.03); }
+  .project-category { color: var(--color-accent); font-size: var(--text-s); font-weight: 600; }
+  .project :is(h2, h3) { font-size: var(--text-l); }
+  .project :is(h2, h3) a { display: inline-flex; align-items: center; gap: 0.35em; text-decoration: none; }
+  .project :is(h2, h3) a::after { content: ''; position: absolute; inset: 0; }
+  .project :is(h2, h3) a :global(svg) { transition: transform 200ms var(--ease-out); }
+  .project:hover :is(h2, h3) a :global(svg) { transform: translate(2px, -2px); }
+  .project:focus-within { outline: 2px solid var(--color-primary); outline-offset: 6px; border-radius: var(--radius-m); }
+  .project :is(h2, h3) a:focus-visible { outline: none; }
+  .project-text { margin-top: var(--space-3xs); color: var(--color-muted); max-width: 52ch; }
+  .project-body { margin-top: var(--space-s); display: grid; gap: var(--space-3xs); }
+
+  /* Grid: three columns with alternating crops. */
+  .projects[data-variant='grid'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: var(--space-2xl) var(--space-l);
+    align-items: start;
+  }
+
+  /* List: each project gets a full row, photo and words side by side, alternating sides. */
+  .projects[data-variant='list'] { display: grid; gap: var(--space-3xl); }
+  @media (min-width: 56rem) {
+    .projects[data-variant='list'] .project {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+      gap: var(--space-2xl);
+      align-items: center;
+    }
+    .projects[data-variant='list'] .project:nth-child(even) .project-media { order: 2; }
+    .projects[data-variant='list'] .project-body { margin-top: 0; }
+    .projects[data-variant='list'] :is(h2, h3) { font-size: var(--text-xl); }
+  }
+
+  /* Featured: the first project wide across the top, the rest in a row beneath. */
+  .projects[data-variant='featured'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: var(--space-2xl) var(--space-l);
+  }
+  .projects[data-variant='featured'] .project:first-child { grid-column: 1 / -1; }
+  .projects[data-variant='featured'] .project:first-child :is(h2, h3) { font-size: var(--text-2xl); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project:hover .project-media :global(img), .project:hover :is(h2, h3) a :global(svg) { transform: none; }
+  }
+</style>

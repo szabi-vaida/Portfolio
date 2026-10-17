@@ -1,0 +1,59 @@
+---
+import Banner from '../vendor/Banner.astro';
+
+interface Props {
+  announcement: { text: string; link?: { label: string; href: string }; closeable?: boolean };
+}
+
+const { announcement } = Astro.props;
+// Webcore's banner removes itself on close. This keeps it closed for the rest of the visit.
+const remember = `(function(){var b=document.querySelector('[data-announcement]');if(!b)return;var k='forge-announcement:'+b.dataset.announcement;try{if(sessionStorage.getItem(k)){b.remove();return}}catch(e){}b.addEventListener('click',function(e){if(e.target.closest('[data-id="w-banner-close"]')){try{sessionStorage.setItem(k,'1')}catch(e){}b.remove()}})})()`;
+const key = announcement.text.length.toString(36) + announcement.text.slice(0, 12).replace(/\W+/g, '');
+---
+
+{
+  announcement.closeable ? (
+    <div class="announcement" data-announcement={key}>
+      <Banner>
+        <span>
+          {announcement.text}
+          {announcement.link && (
+            <>
+              {' '}
+              <a href={announcement.link.href}>{announcement.link.label}</a>
+            </>
+          )}
+        </span>
+      </Banner>
+      <script is:inline set:html={remember} />
+    </div>
+  ) : (
+    <div class="announcement">
+      <p>
+        {announcement.text}
+        {announcement.link && (
+          <>
+            {' '}
+            <a href={announcement.link.href}>{announcement.link.label}</a>
+          </>
+        )}
+      </p>
+    </div>
+  )
+}
+
+<style>
+  .announcement {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-size: var(--text-s);
+    text-align: center;
+  }
+  .announcement p {
+    padding: var(--space-2xs) var(--gutter);
+  }
+  .announcement a {
+    font-weight: 600;
+    color: inherit;
+  }
+</style>

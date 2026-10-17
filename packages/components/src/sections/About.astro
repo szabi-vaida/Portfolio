@@ -1,0 +1,58 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Button from '../primitives/Button.astro';
+import Heading from '../primitives/Heading.astro';
+import Image from '../primitives/Image.astro';
+import Markdown from '../primitives/Markdown.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'about'>>;
+
+const { section, anchor, first } = Astro.props;
+const { variant, tone, heading, body, image, actions = [] } = section;
+const look = variant === 'split' && !image ? 'centred' : variant;
+---
+
+<Section anchor={anchor} tone={tone} first={first} width={look === 'centred' ? 'narrow' : 'default'}>
+  <div class="about" data-variant={look}>
+    {
+      image && (
+        <div class="about-media">
+          <Image image={image} ratio={look === 'split' ? '4/5' : '16/9'} sizes={look === 'split' ? '(min-width: 56rem) 40vw, 100vw' : '(min-width: 48rem) 44rem, 100vw'} />
+        </div>
+      )
+    }
+    <div class="about-copy">
+      <Heading level={first ? 1 : 2} size="xl" id={`${anchor}-title`}>{heading}</Heading>
+      <Markdown text={body} />
+      {
+        actions.length > 0 && (
+          <div class="about-actions">
+            {actions.map((a, i) => (
+              <Button href={a.href} variant={i === 0 ? 'primary' : 'quiet'}>
+                {a.label}
+              </Button>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</Section>
+
+<style>
+  .about { display: grid; gap: var(--space-xl); }
+  .about-copy { display: grid; gap: var(--space-m); align-content: center; }
+  .about-media { border-radius: var(--radius-l); overflow: hidden; }
+  .about-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-m); margin-top: var(--space-2xs); }
+
+  @media (min-width: 56rem) {
+    .about[data-variant='split'] {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: var(--space-3xl);
+      align-items: center;
+    }
+  }
+  .about[data-variant='centred'] .about-copy { text-align: left; }
+</style>

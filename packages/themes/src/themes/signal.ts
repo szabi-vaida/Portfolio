@@ -1,0 +1,41 @@
+import type { Theme } from '../types.ts';
+
+/** Near-black with an electric lime and a technical grotesk. For agencies, launches and products. */
+export const signal: Theme = {
+  label: 'Signal',
+  description: 'Near-black with electric lime and a technical grotesk. Sharp and confident.',
+  fonts: { heading: 'Space Grotesk', body: 'Manrope' },
+  headingWeight: 600,
+  headingTracking: -0.035,
+  light: {
+    background: '#fafaf7',
+    tinted: '#f0f1ea',
+    surface: '#ffffff',
+    text: '#0b0c0f',
+    muted: '#50545e',
+    border: '#dcdfd5',
+    primary: '#0b0c0f',
+    'on-primary': '#f3f4f6',
+    accent: '#3f6212',
+    bold: '#0b0c0f',
+    'on-bold': '#c8f04a',
+  },
+  dark: {
+    background: '#0b0c0f',
+    tinted: '#12141a',
+    surface: '#171a21',
+    text: '#f3f4f6',
+    muted: '#a1a7b3',
+    border: '#262a33',
+    primary: '#c8f04a',
+    'on-primary': '#0b0c0f',
+    accent: '#7dd3fc',
+    bold: '#c8f04a',
+    'on-bold': '#0b0c0f',
+  },
+  defaultMode: 'dark',
+  corners: 'soft',
+  spacing: 'airy',
+  textSize: 'medium',
+  shadow: 'crisp',
+};

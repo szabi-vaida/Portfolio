@@ -1,0 +1,38 @@
+---
+// Webcore UI Carousel (MIT, Copyright (c) 2024 Frontendland), see CREDITS.md. Swipe or arrow buttons, with a 1 of 6 counter.
+import WebcoreCarousel from '@webcore/Carousel/Carousel.astro';
+
+/** Children are li elements, one per slide. */
+interface Props {
+  count: number;
+}
+
+const { count } = Astro.props;
+---
+
+<div class="carousel">
+  <WebcoreCarousel items={count} subText="{0} of {1}">
+    <slot />
+  </WebcoreCarousel>
+</div>
+
+<style>
+  /* Point Webcore's colours and corners at the theme tokens. */
+  .carousel {
+    --w-color-primary: var(--color-text);
+    --w-color-primary-10: var(--color-text);
+    --w-color-primary-20: var(--color-muted);
+    --w-color-primary-30: var(--color-muted);
+    --w-color-primary-40: var(--color-muted);
+    --w-color-primary-50: var(--color-border);
+    --w-color-primary-60: var(--color-tinted);
+    --w-color-primary-70: var(--color-background);
+    --w-sm-radius: var(--radius-s);
+    --w-md-radius: var(--radius-m);
+    --w-lg-radius: var(--radius-l);
+  }
+  .carousel :global(li) { flex-direction: column; }
+  .carousel :global(figure) { width: 100%; }
+  .carousel :global([data-id='w-pagination'] button) { min-width: 2.75rem; min-height: 2.75rem; }
+  .carousel :global(button:focus-visible) { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+</style>

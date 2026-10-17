@@ -99,6 +99,24 @@ export default function Home() {
       {/* ================= ABOUT ================= */}
       <Box sx={{ ...containerSx, my: 6 }}>
         <Grid container spacing={3} justifyContent="center">
+          <Grid item xs={12} md={12}>
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+              <Box sx={{ width: "100%" }}>
+                <AboutSectionsCard
+                  sections={[
+                    {
+                      title: "Focus",
+                      items: [
+                        "Building user-focused, reliable software",
+                        "Working across disciplines and domains (platforms, job boards, finance)",
+                        "Continuous learning and improving engineering practices",
+                      ],
+                    },
+                  ]}
+                />
+              </Box>
+            </Box>
+          </Grid>
           <Grid item xs={12} md={8}>
             <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
               <Box sx={{ width: "100%" }}>
@@ -111,25 +129,6 @@ export default function Home() {
                         "QA Tester (part-time) — Proper QA (2022-)",
                         "Self-Employed Programming Tutor (Freelance) (2022-)",
                         "BSc: Computer Science for Games",
-                      ],
-                    },
-                  ]}
-                />
-              </Box>
-            </Box>
-          </Grid>
-
-          <Grid item xs={12} md={12}>
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-              <Box sx={{ width: "100%" }}>
-                <AboutSectionsCard
-                  sections={[
-                    {
-                      title: "Focus",
-                      items: [
-                        "Building user-focused, reliable software",
-                        "Working across disciplines and domains (platforms, job boards, finance)",
-                        "Continuous learning and improving engineering practices",
                       ],
                     },
                   ]}

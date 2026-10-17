@@ -1,0 +1,9 @@
+{
+  "name": "@forge/components",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": { "./*": "./src/*" },
+  "dependencies": { "@forge/schema": "*", "@forge/themes": "*", "webcoreui": "1.5.0" }
+}

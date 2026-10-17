@@ -1,0 +1,159 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Badge from '../primitives/Badge.astro';
+import Button from '../primitives/Button.astro';
+import Image from '../primitives/Image.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'product-grid'>>;
+
+const { section, anchor, first } = Astro.props;
+// Item titles sit one level below the section heading, which is the h1 when the section opens the page.
+const H = first ? 'h2' : 'h3';
+const { variant, tone, heading, intro, products, filter } = section;
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const categories = [...new Set(products.flatMap((p) => (p.category ? [p.category] : [])))];
+const filtering = filter === true && categories.length > 1;
+const radio = (key: string) => `${anchor}-show-${key}`;
+// The filter is plain CSS: a checked radio button hides the products of other categories. No script.
+const filterCss = filtering
+  ? categories
+      .map((c) => `#${anchor} .shop:has(#${radio(slug(c))}:checked) .product:not([data-category="${slug(c)}"]){display:none}`)
+      .join('')
+  : '';
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} intro={intro} align="split" first={first}>
+  <div class="shop">
+    {
+      filtering && (
+        <fieldset class="filter">
+          <legend class="visually-hidden">Show products</legend>
+          <input type="radio" name={`${anchor}-show`} id={radio('all')} checked />
+          <label for={radio('all')}>All</label>
+          {categories.map((c) => (
+            <>
+              <input type="radio" name={`${anchor}-show`} id={radio(slug(c))} />
+              <label for={radio(slug(c))}>{c}</label>
+            </>
+          ))}
+        </fieldset>
+      )
+    }
+    {filtering && <style is:inline set:html={filterCss} />}
+    <ul class="products" data-variant={variant} role="list">
+      {
+        products.map((p) => (
+          <li class="product" data-category={p.category ? slug(p.category) : undefined} data-sold-out={p.soldOut ? '' : undefined}>
+            <div class="product-media">
+              <Image
+                image={p.image}
+                ratio={variant === 'grid' ? '4/5' : '1/1'}
+                widths={[320, 480, 720, 960]}
+                sizes={variant === 'grid' ? '(min-width: 64rem) 22rem, (min-width: 40rem) 45vw, 100vw' : '(min-width: 48rem) 12rem, 40vw'}
+              />
+              {(p.badge || p.soldOut) && (
+                <span class="product-badge">
+                  <Badge tone={p.soldOut ? 'strong' : 'accent'}>{p.soldOut ? 'Sold out' : p.badge}</Badge>
+                </span>
+              )}
+            </div>
+            <div class="product-body">
+              {p.category && <p class="product-category">{p.category}</p>}
+              <H>{p.name}</H>
+              <p class="product-price">{p.price}</p>
+              {p.description && <p class="product-description">{p.description}</p>}
+              {p.buyUrl && !p.soldOut && (
+                <div class="product-buy">
+                  <Button href={p.buyUrl} variant={variant === 'grid' ? 'secondary' : 'primary'}>
+                    {p.buyLabel ?? 'Buy now'}
+                    <span class="visually-hidden">: {p.name}</span>
+                  </Button>
+                </div>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Section>
+
+<style>
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin: 0 0 var(--space-l);
+    padding: 0;
+    border: 0;
+  }
+  .filter input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .filter label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 1.1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+  }
+  .filter label:hover { border-color: var(--color-text); }
+  .filter input:checked + label {
+    background: var(--color-text);
+    border-color: var(--color-text);
+    color: var(--color-background);
+  }
+  .filter input:focus-visible + label { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
+  .product { position: relative; }
+  .product-media {
+    position: relative;
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    background: var(--color-tinted);
+  }
+  .product-media :global(img) { transition: transform 600ms var(--ease-out); }
+  .product:hover .product-media :global(img) { transform: scale(1.03); }
+  .product[data-sold-out] .product-media :global(img) { filter: grayscale(0.6); opacity: 0.75; }
+  .product-badge { position: absolute; top: var(--space-xs); left: var(--space-xs); }
+  .product-body { display: grid; gap: var(--space-3xs); }
+  .product-category { color: var(--color-muted); font-size: var(--text-xs); letter-spacing: 0.04em; text-transform: uppercase; }
+  .product :is(h2, h3) { font-size: var(--text-m); }
+  .product-price { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .product-description { color: var(--color-muted); font-size: var(--text-s); }
+  .product-buy { margin-top: var(--space-xs); }
+
+  /* Grid: tall product photos in rows, details underneath. */
+  .products[data-variant='grid'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: var(--space-xl) var(--space-l);
+  }
+  .products[data-variant='grid'] .product-body { margin-top: var(--space-s); }
+  .products[data-variant='grid'] .product :is(h2, h3) { display: inline; }
+  .products[data-variant='grid'] .product-buy :global(.button) { width: 100%; }
+
+  /* List: a square photo beside the details, for fewer products with more to say. */
+  .products[data-variant='list'] { display: grid; gap: var(--space-l); }
+  .products[data-variant='list'] .product {
+    display: grid;
+    grid-template-columns: minmax(6rem, 10rem) minmax(0, 1fr);
+    gap: var(--space-l);
+    align-items: center;
+    padding-bottom: var(--space-l);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .products[data-variant='list'] .product :is(h2, h3) { font-size: var(--text-l); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product:hover .product-media :global(img) { transform: none; }
+  }
+</style>

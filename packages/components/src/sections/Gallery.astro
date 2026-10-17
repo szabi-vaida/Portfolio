@@ -1,0 +1,65 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Section from '../primitives/Section.astro';
+import GalleryFigure from '../parts/GalleryFigure.astro';
+import Lightbox from '../islands/Lightbox.astro';
+import Carousel from '../vendor/Carousel.astro';
+import Masonry from '../vendor/Masonry.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'gallery'>>;
+
+const { section, anchor, first } = Astro.props;
+const { variant, tone, heading, intro, items } = section;
+// With five or more photos the first one is shown large, which gives the grid a focal point.
+const feature = variant === 'grid' && items.length >= 5;
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} intro={intro} align="split" width="wide" first={first}>
+  {
+    variant === 'grid' && (
+      <ul class="grid" data-feature={feature ? '' : undefined} role="list" data-lightbox-group>
+        {items.map((item, i) => (
+          <li>
+            <GalleryFigure item={item} ratio={feature ? '1/1' : '4/3'} sizes={feature && i === 0 ? '(min-width: 56rem) 50vw, 100vw' : '(min-width: 56rem) 25vw, 50vw'} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    variant === 'masonry' && (
+      <div data-lightbox-group>
+        <Masonry items={items.map((item) => ({ component: GalleryFigure, props: { item } }))} />
+      </div>
+    )
+  }
+  {
+    variant === 'carousel' && (
+      <Carousel count={items.length}>
+        {items.map((item) => (
+          <li>
+            <GalleryFigure item={item} ratio="3/2" zoom={false} sizes="(min-width: 90rem) 90rem, 100vw" />
+          </li>
+        ))}
+      </Carousel>
+    )
+  }
+</Section>
+{variant !== 'carousel' && <Lightbox />}
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-s);
+  }
+  @media (min-width: 56rem) {
+    .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-m); }
+    .grid[data-feature] > li:first-child { grid-column: span 2; grid-row: span 2; }
+    .grid[data-feature] > li:first-child :global(img) { height: 100%; }
+    .grid[data-feature] > li:first-child :global(figure),
+    .grid[data-feature] > li:first-child :global(a),
+    .grid[data-feature] > li:first-child :global(picture) { height: 100%; }
+  }
+</style>

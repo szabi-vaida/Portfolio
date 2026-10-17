@@ -1,0 +1,27 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Heading from '../primitives/Heading.astro';
+import Markdown from '../primitives/Markdown.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'text'>>;
+
+const { section, anchor, first } = Astro.props;
+const { variant, tone, heading, body } = section;
+---
+
+<Section anchor={anchor} tone={tone} first={first} width={variant === 'narrow' ? 'narrow' : 'default'}>
+  <div class="text" data-variant={variant}>
+    {heading && <Heading level={first ? 1 : 2} size="xl" id={`${anchor}-title`}>{heading}</Heading>}
+    <Markdown text={body} />
+  </div>
+</Section>
+
+<style>
+  .text { display: grid; gap: var(--space-l); }
+  /* Wide: heading on the left, text on the right, for terms, policies and longer notes. */
+  @media (min-width: 56rem) {
+    .text[data-variant='wide'] { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: var(--space-3xl); align-items: start; }
+  }
+</style>

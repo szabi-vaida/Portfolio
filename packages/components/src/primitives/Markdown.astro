@@ -1,0 +1,37 @@
+---
+import { getEntry, render } from 'astro:content';
+import { markdownKey } from '@forge/schema';
+
+interface Props {
+  text: string;
+  /** prose sets reading styles for longer text. compact suits short answers. */
+  look?: 'prose' | 'compact';
+  class?: string;
+}
+
+const { text, look = 'prose', class: className } = Astro.props;
+// The site loader renders every markdown field once, keyed by its text.
+const entry = await getEntry('site', markdownKey(text));
+if (!entry) throw new Error(`Markdown text was not prepared by the site loader: ${text.slice(0, 40)}`);
+const { Content } = await render(entry);
+---
+
+<div class:list={['markdown', className]} data-look={look}><Content /></div>
+
+<style>
+  .markdown { max-width: var(--measure); }
+  .markdown > :global(* + *) { margin-top: 0.85em; }
+  .markdown > :global(h2), .markdown > :global(h3) { margin-top: 1.6em; }
+  .markdown :global(h2) { font-size: var(--text-xl); }
+  .markdown :global(h3) { font-size: var(--text-l); }
+  .markdown :global(ul), .markdown :global(ol) { padding-left: 1.25em; }
+  .markdown :global(li + li) { margin-top: 0.35em; }
+  .markdown :global(li::marker) { color: var(--color-muted); }
+  .markdown :global(a) { color: var(--color-primary); }
+  .markdown :global(blockquote) { padding-left: 1em; border-left: 2px solid var(--color-border); color: var(--color-muted); font-style: italic; }
+  .markdown :global(hr) { border: 0; border-top: 1px solid var(--color-border); margin-block: 2em; }
+  .markdown :global(img) { border-radius: var(--radius-m); }
+  .markdown :global(code) { font-size: 0.9em; padding: 0.1em 0.35em; border-radius: var(--radius-s); background: var(--color-tinted); }
+  .markdown[data-look='prose'] { font-size: var(--text-m); line-height: 1.7; }
+  .markdown[data-look='compact'] { color: var(--color-muted); }
+</style>

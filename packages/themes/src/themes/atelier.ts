@@ -1,0 +1,41 @@
+import type { Theme } from '../types.ts';
+
+/** Ink on paper with one vivid accent and an elegant serif. For portfolios and studios. */
+export const atelier: Theme = {
+  label: 'Atelier',
+  description: 'Ink on paper with one vivid accent and an elegant serif. Lets the work speak.',
+  fonts: { heading: 'Instrument Serif', body: 'Instrument Sans' },
+  headingWeight: 400,
+  headingTracking: -0.01,
+  light: {
+    background: '#f4f3ef',
+    tinted: '#ebe9e3',
+    surface: '#ffffff',
+    text: '#111111',
+    muted: '#57554f',
+    border: '#d8d5cc',
+    primary: '#111111',
+    'on-primary': '#f4f3ef',
+    accent: '#b23a0b',
+    bold: '#111111',
+    'on-bold': '#f4f3ef',
+  },
+  dark: {
+    background: '#0e0e0d',
+    tinted: '#171716',
+    surface: '#1c1c1a',
+    text: '#f2f0ea',
+    muted: '#a8a59c',
+    border: '#2e2d2a',
+    primary: '#f2f0ea',
+    'on-primary': '#0e0e0d',
+    accent: '#fb8c5a',
+    bold: '#f2f0ea',
+    'on-bold': '#0e0e0d',
+  },
+  defaultMode: 'light',
+  corners: 'square',
+  spacing: 'airy',
+  textSize: 'medium',
+  shadow: 'none',
+};

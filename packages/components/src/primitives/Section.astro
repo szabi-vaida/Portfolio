@@ -1,0 +1,83 @@
+---
+import Container from './Container.astro';
+import Heading from './Heading.astro';
+
+interface Props {
+  /** The element id, used by menu links such as #menu. */
+  anchor: string;
+  tone?: 'plain' | 'tinted' | 'bold';
+  heading?: string;
+  intro?: string;
+  /** start puts the heading on the left, centre centres it, split puts the intro beside the heading. */
+  align?: 'start' | 'centre' | 'split';
+  width?: 'default' | 'narrow' | 'wide';
+  /** The first section on a page passes true. Its heading becomes the page's h1 and it is never held back. */
+  first?: boolean;
+  class?: string;
+}
+
+const { anchor, tone = 'plain', heading, intro, align = 'start', width = 'default', first = false, class: className } = Astro.props;
+const reveal = !first;
+const headingId = heading ? `${anchor}-title` : undefined;
+const hasHead = !!heading || Astro.slots.has('head');
+---
+
+<section
+  id={anchor}
+  class:list={['section', className]}
+  data-tone={tone}
+  data-reveal={reveal ? '' : undefined}
+  aria-labelledby={headingId}
+>
+  <Container size={width}>
+    {
+      hasHead && (
+        <header class="section-head" data-align={align}>
+          {heading && <Heading id={headingId} level={first ? 1 : 2} size="xl">{heading}</Heading>}
+          {intro && <p class="section-intro">{intro}</p>}
+          <slot name="head" />
+        </header>
+      )
+    }
+    <slot />
+  </Container>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--section-space);
+  }
+  /* Two plain sections in a row get a hairline between them, so the page still reads as bands. */
+  .section[data-tone='plain'] + .section[data-tone='plain'] {
+    border-top: 1px solid var(--hairline);
+  }
+
+  .section-head {
+    display: grid;
+    gap: var(--space-s);
+    margin-bottom: var(--space-xl);
+    max-width: 46rem;
+  }
+  .section-head[data-align='centre'] {
+    margin-inline: auto;
+    text-align: center;
+    justify-items: center;
+  }
+  .section-head[data-align='split'] {
+    max-width: none;
+  }
+  .section-intro {
+    color: var(--color-muted);
+    font-size: var(--text-m);
+    line-height: 1.55;
+    max-width: 56ch;
+  }
+
+  @media (min-width: 56rem) {
+    .section-head[data-align='split'] {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: end;
+      column-gap: var(--space-2xl);
+    }
+  }
+</style>

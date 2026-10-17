@@ -1,0 +1,9 @@
+{
+  "name": "@forge/decap",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": { "@forge/catalogue": "*", "@forge/schema": "*", "yaml": "^2", "zod": "^4.6.5" }
+}

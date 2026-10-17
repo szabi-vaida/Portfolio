@@ -1,0 +1,9 @@
+{
+  "name": "@forge/catalogue",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": { "@forge/schema": "*", "@forge/themes": "*" }
+}

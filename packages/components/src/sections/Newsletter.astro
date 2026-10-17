@@ -1,0 +1,56 @@
+---
+import '../styles/fields.css';
+import type { SectionOf } from '@forge/schema';
+import Button from '../primitives/Button.astro';
+import Heading from '../primitives/Heading.astro';
+import Container from '../primitives/Container.astro';
+import NetlifyForm from '../parts/NetlifyForm.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'newsletter'>>;
+
+const { section, anchor, first, site } = Astro.props;
+const { variant, tone, heading, intro, emailLabel, submitLabel, successPath } = section;
+const formName = `${site.meta.name}-newsletter`;
+const inputId = `${anchor}-email`;
+---
+
+<section id={anchor} class="newsletter" data-variant={variant} data-tone={tone === 'plain' ? 'tinted' : tone} data-reveal={first ? undefined : ''} aria-labelledby={`${anchor}-title`}>
+  <Container size={variant === 'stacked' ? 'narrow' : 'default'} class="newsletter-inner">
+    <div class="newsletter-copy">
+      <Heading level={first ? 1 : 2} size="l" id={`${anchor}-title`}>{heading}</Heading>
+      {intro && <p>{intro}</p>}
+    </div>
+    <NetlifyForm name={formName} action={successPath} label={heading} class="newsletter-form">
+      <div class="field">
+        <label for={inputId}>{emailLabel}</label>
+        <div class="row">
+          <input id={inputId} name="email" type="email" autocomplete="email" required />
+          <Button type="submit">{submitLabel}</Button>
+        </div>
+      </div>
+    </NetlifyForm>
+  </Container>
+</section>
+
+<style>
+  .newsletter { padding-block: clamp(3rem, 7vw, 5rem); }
+  .newsletter :global(.newsletter-inner) { display: grid; gap: var(--space-l); }
+  .newsletter-copy { display: grid; gap: var(--space-xs); }
+  .newsletter-copy p { color: var(--color-muted); max-width: 46ch; }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+  .row input { flex: 1 1 14rem; width: auto; }
+
+  .newsletter[data-variant='stacked'] { text-align: center; }
+  .newsletter[data-variant='stacked'] .newsletter-copy { justify-items: center; }
+  .newsletter[data-variant='stacked'] .field { justify-items: center; }
+  .newsletter[data-variant='stacked'] .row { width: min(100%, 30rem); }
+
+  @media (min-width: 56rem) {
+    .newsletter[data-variant='inline'] :global(.newsletter-inner) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

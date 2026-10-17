@@ -1,0 +1,22 @@
+---
+/**
+ * A form Netlify Forms collects on deploy. The hidden form-name field and the bot-field honeypot are what Netlify expects.
+ * Forms only send on Netlify hosting. Elsewhere they still render.
+ */
+interface Props {
+  name: string;
+  action: string;
+  label: string;
+  class?: string;
+}
+
+const { name, action, label, class: className } = Astro.props;
+---
+
+<form class={className} name={name} method="POST" action={action} data-netlify="true" netlify-honeypot="bot-field" aria-label={label}>
+  <input type="hidden" name="form-name" value={name} />
+  <p class="visually-hidden" aria-hidden="true">
+    <label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+  </p>
+  <slot />
+</form>

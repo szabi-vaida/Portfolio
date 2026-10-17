@@ -1,0 +1,41 @@
+import type { Theme } from '../types.ts';
+
+/** Cream, wine and mustard with a high-contrast display serif. For cafés, bars and restaurants. */
+export const bistro: Theme = {
+  label: 'Bistro',
+  description: 'Cream, wine and mustard with a bold display serif. Warm and inviting.',
+  fonts: { heading: 'DM Serif Display', body: 'Karla' },
+  headingWeight: 400,
+  headingTracking: -0.01,
+  light: {
+    background: '#f8f2e7',
+    tinted: '#efe5d3',
+    surface: '#fffaf1',
+    text: '#2b1d14',
+    muted: '#66513f',
+    border: '#dccbb0',
+    primary: '#7b2d26',
+    'on-primary': '#fff8ee',
+    accent: '#7f520f',
+    bold: '#2b1d14',
+    'on-bold': '#f8f2e7',
+  },
+  dark: {
+    background: '#1a120d',
+    tinted: '#22180f',
+    surface: '#2a1e15',
+    text: '#f5eadb',
+    muted: '#c4ae94',
+    border: '#3d2c1f',
+    primary: '#e8a598',
+    'on-primary': '#1a120d',
+    accent: '#e0b45c',
+    bold: '#f5eadb',
+    'on-bold': '#1a120d',
+  },
+  defaultMode: 'light',
+  corners: 'soft',
+  spacing: 'comfortable',
+  textSize: 'medium',
+  shadow: 'soft',
+};

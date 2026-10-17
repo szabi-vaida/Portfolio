@@ -1,0 +1,149 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Heading from '../primitives/Heading.astro';
+import Icon from '../primitives/Icon.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'features'>>;
+
+const { section, anchor, first } = Astro.props;
+// Item titles sit one level below the section heading, which is the h1 when the section opens the page.
+const H = first ? 'h2' : 'h3';
+const { variant, tone, heading, intro, items } = section;
+---
+
+<Section anchor={anchor} tone={tone} heading={variant === 'split' ? undefined : heading} intro={variant === 'split' ? undefined : intro} align={variant === 'list' ? 'split' : 'start'} first={first}>
+  {
+    variant === 'split' ? (
+      <div class="split">
+        <div class="split-head">
+          <Heading level={first ? 1 : 2} size="xl" id={`${anchor}-title`}>{heading}</Heading>
+          {intro && <p class="split-intro">{intro}</p>}
+        </div>
+        <dl class="split-items">
+          {items.map((item) => (
+            <div class="split-item">
+              <dt>
+                {item.icon && <Icon name={item.icon} size={1.25} />}
+                {item.title}
+              </dt>
+              <dd>{item.text}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    ) : (
+      <ul class="features" data-variant={variant} role="list" data-count={items.length}>
+        {items.map((item) => (
+          <li class="feature">
+            {item.icon && (
+              <span class="feature-icon">
+                <Icon name={item.icon} size={1.35} />
+              </span>
+            )}
+            <H>{item.title}</H>
+            <p>{item.text}</p>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</Section>
+
+<style>
+  .feature :is(h2, h3) { font-size: var(--text-m); }
+  .feature p { color: var(--color-muted); max-width: 46ch; }
+
+  /* Columns: open columns divided by hairlines, no boxes. */
+  .features[data-variant='columns'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: var(--space-xl) var(--space-l);
+  }
+  .features[data-variant='columns'] .feature {
+    display: grid;
+    align-content: start;
+    gap: var(--space-2xs);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--color-border);
+  }
+  .feature-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: var(--space-2xs);
+    border-radius: var(--radius-s);
+    background: color-mix(in oklab, var(--color-accent) 12%, transparent);
+    color: var(--color-accent);
+  }
+
+  /* List: a numbered run of rows, for services or reasons that read in order. */
+  .features[data-variant='list'] {
+    counter-reset: feature;
+    border-top: 1px solid var(--color-border);
+  }
+  .features[data-variant='list'] .feature {
+    counter-increment: feature;
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    column-gap: var(--space-m);
+    padding-block: var(--space-l);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .features[data-variant='list'] .feature::before {
+    content: counter(feature, decimal-leading-zero);
+    grid-row: 1 / span 2;
+    color: var(--color-accent);
+    font-family: var(--font-heading);
+    font-size: var(--text-m);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.3;
+  }
+  .features[data-variant='list'] .feature-icon { display: none; }
+  .features[data-variant='list'] :is(h2, h3) { font-size: var(--text-l); }
+  @media (min-width: 48rem) {
+    .features[data-variant='list'] .feature {
+      grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 1.2fr);
+      align-items: baseline;
+    }
+    .features[data-variant='list'] .feature::before { grid-row: auto; }
+  }
+
+  /* Split: the heading stays in view on the left while the points scroll past on the right. */
+  .split {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .split-intro {
+    margin-top: var(--space-s);
+    color: var(--color-muted);
+    font-size: var(--text-m);
+    max-width: 40ch;
+  }
+  .split-item {
+    padding-block: var(--space-m);
+    border-top: 1px solid var(--color-border);
+  }
+  .split-item:last-child { border-bottom: 1px solid var(--color-border); }
+  .split-item dt {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    font-size: var(--text-l);
+    letter-spacing: calc(var(--heading-tracking) / 2);
+  }
+  .split-item dt :global(svg) { color: var(--color-accent); }
+  .split-item dd {
+    margin-top: var(--space-3xs);
+    color: var(--color-muted);
+    max-width: 52ch;
+  }
+  @media (min-width: 56rem) {
+    .split { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: var(--space-3xl); }
+    .split-head { position: sticky; top: calc(var(--nav-height) + var(--space-l)); align-self: start; }
+  }
+</style>

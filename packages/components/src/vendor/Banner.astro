@@ -1,0 +1,25 @@
+---
+// Webcore UI Banner (MIT, Copyright (c) 2024 Frontendland), see CREDITS.md. Sections use this wrapper, never Webcore directly.
+import WebcoreBanner from '@webcore/Banner/Banner.astro';
+---
+
+<div class="webcore-banner">
+  <WebcoreBanner closeable sticky={false}><slot /></WebcoreBanner>
+</div>
+
+<style>
+  .webcore-banner :global([class*='banner']) {
+    --w-color-primary-60: var(--color-primary);
+    --w-color-primary: var(--color-on-primary);
+    justify-content: center;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-size: var(--text-s);
+  }
+  .webcore-banner :global([data-id='w-banner-close']) {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    color: inherit;
+  }
+  .webcore-banner :global([data-id='w-banner-close'] svg) { fill: currentColor; }
+</style>

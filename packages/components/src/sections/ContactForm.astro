@@ -1,0 +1,117 @@
+---
+import '../styles/fields.css';
+import type { SectionOf } from '@forge/schema';
+import Button from '../primitives/Button.astro';
+import Icon from '../primitives/Icon.astro';
+import Section from '../primitives/Section.astro';
+import NetlifyForm from '../parts/NetlifyForm.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'contact-form'>>;
+
+const { section, anchor, first, site } = Astro.props;
+const { variant, tone, heading, intro, fields, submitLabel, successPath, email, phone, address } = section;
+const formName = `${site.meta.name}-contact`;
+const hasDetails = !!(email || phone || address);
+const look = variant === 'split' && hasDetails ? 'split' : 'simple';
+const id = (name: string) => `${anchor}-${name}`;
+const autocomplete: Record<string, string> = { name: 'name', email: 'email', phone: 'tel', tel: 'tel', company: 'organization' };
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} intro={intro} width={look === 'simple' ? 'narrow' : 'default'} first={first}>
+  <div class="contact" data-variant={look}>
+    {
+      look === 'split' && (
+        <address class="details">
+          {email && (
+            <p>
+              <Icon name="mail" />
+              <a href={`mailto:${email}`}>{email}</a>
+            </p>
+          )}
+          {phone && (
+            <p>
+              <Icon name="phone" />
+              <a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a>
+            </p>
+          )}
+          {address && (
+            <p>
+              <Icon name="pin" />
+              <span>{address}</span>
+            </p>
+          )}
+        </address>
+      )
+    }
+    <NetlifyForm name={formName} action={successPath} label={heading} class="form">
+      {
+        fields.map((field) => (
+          <div class="field" data-wide={field.kind === 'textarea' ? '' : undefined}>
+            <label for={id(field.name)}>
+              {field.label}
+              {!field.required && <span class="required"> (optional)</span>}
+            </label>
+            {field.kind === 'textarea' ? (
+              <textarea id={id(field.name)} name={field.name} required={field.required} rows="5" />
+            ) : field.kind === 'select' ? (
+              <select id={id(field.name)} name={field.name} required={field.required}>
+                <option value="">Choose one</option>
+                {(field.options ?? []).map((o) => (
+                  <option value={o}>{o}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                id={id(field.name)}
+                name={field.name}
+                type={field.kind}
+                required={field.required}
+                autocomplete={autocomplete[field.name] ?? (field.kind === 'email' ? 'email' : field.kind === 'tel' ? 'tel' : undefined)}
+              />
+            )}
+          </div>
+        ))
+      }
+      <div class="submit">
+        <Button type="submit" size="l">{submitLabel}</Button>
+      </div>
+    </NetlifyForm>
+  </div>
+</Section>
+
+<style>
+  .contact :global(.form) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: var(--space-m);
+  }
+  .contact :global(.form) > :global([data-wide]),
+  .submit { grid-column: 1 / -1; }
+
+  .details {
+    display: grid;
+    gap: var(--space-m);
+    align-content: start;
+    font-style: normal;
+    font-size: var(--text-m);
+  }
+  .details p {
+    display: flex;
+    gap: var(--space-s);
+    align-items: flex-start;
+    white-space: pre-line;
+  }
+  .details :global(svg) { margin-top: 0.2em; color: var(--color-accent); }
+  .details a { text-decoration: none; }
+  .details a:hover { text-decoration: underline; }
+
+  @media (min-width: 56rem) {
+    .contact[data-variant='split'] {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: var(--space-3xl);
+    }
+    .contact[data-variant='split'] .details { padding-top: var(--space-s); border-top: 1px solid var(--color-border); }
+  }
+</style>

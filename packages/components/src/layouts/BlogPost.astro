@@ -1,0 +1,103 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Button from '../primitives/Button.astro';
+import Container from '../primitives/Container.astro';
+import Heading from '../primitives/Heading.astro';
+import Image from '../primitives/Image.astro';
+import { formatDate, type SiteSpec } from '../lib/site';
+
+interface Props {
+  site: SiteSpec;
+  path: string;
+  post: CollectionEntry<'posts'>;
+}
+
+const { site, path, post } = Astro.props;
+const blog = site.blog!;
+const { title, description, date, image, alt } = post.data;
+const cover = image && alt ? { src: image, alt } : undefined;
+
+const structured = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: date.toISOString(),
+  ...(site.meta.url ? { url: new URL(path, site.meta.url).href } : {}),
+  publisher: { '@type': 'Organization', name: site.meta.title },
+};
+---
+
+<BaseLayout site={site} path={path} title={title} description={description} image={cover} kind="article">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(structured)} />
+  <article class="post">
+    <Container size="narrow">
+      <header class="post-head">
+        <p class="post-meta">
+          <a href={blog.path}>{blog.title}</a>
+          <span aria-hidden="true">·</span>
+          <time datetime={date.toISOString()}>{formatDate(date, site.meta.locale)}</time>
+        </p>
+        <Heading level={1} size="xl">{title}</Heading>
+        <p class="post-lede">{description}</p>
+      </header>
+    </Container>
+    {
+      cover && (
+        <Container size="default" class="post-cover">
+          <Image image={cover} ratio="16/9" priority sizes="(min-width: 74rem) 74rem, 100vw" />
+        </Container>
+      )
+    }
+    <Container size="narrow">
+      <div class="post-body"><slot /></div>
+      <footer class="post-foot">
+        <Button href={blog.path} variant="quiet">More from {blog.title}</Button>
+      </footer>
+    </Container>
+  </article>
+</BaseLayout>
+
+<style>
+  .post { padding-block: clamp(2.5rem, 7vw, 5rem); }
+  .post-head { display: grid; gap: var(--space-s); }
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    color: var(--color-muted);
+    font-size: var(--text-s);
+  }
+  .post-meta a { color: inherit; }
+  .post-lede {
+    color: var(--color-muted);
+    font-size: var(--text-l);
+    line-height: 1.45;
+  }
+  .post :global(.post-cover) { margin-block: var(--space-xl); }
+  .post :global(.post-cover img) { border-radius: var(--radius-l); }
+
+  .post-body {
+    margin-top: var(--space-xl);
+    font-size: var(--text-m);
+    line-height: 1.75;
+  }
+  .post-body > :global(* + *) { margin-top: 1em; }
+  .post-body > :global(h2) { margin-top: 2em; font-size: var(--text-xl); }
+  .post-body > :global(h3) { margin-top: 1.6em; font-size: var(--text-l); }
+  .post-body :global(ul), .post-body :global(ol) { padding-left: 1.25em; }
+  .post-body :global(li + li) { margin-top: 0.4em; }
+  .post-body :global(a) { color: var(--color-primary); }
+  .post-body :global(blockquote) {
+    margin-inline: 0;
+    padding-left: 1.25em;
+    border-left: 2px solid var(--color-accent);
+    font-family: var(--font-heading);
+    font-size: var(--text-l);
+    line-height: 1.4;
+  }
+  .post-body :global(img) { border-radius: var(--radius-m); }
+  .post-body :global(pre) { overflow-x: auto; padding: var(--space-m); border-radius: var(--radius-m); background: var(--color-tinted); font-size: var(--text-s); }
+  .post-foot { margin-top: var(--space-2xl); padding-top: var(--space-l); border-top: 1px solid var(--hairline); }
+</style>

@@ -1,0 +1,113 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'steps'>>;
+
+const { section, anchor, first } = Astro.props;
+// Item titles sit one level below the section heading, which is the h1 when the section opens the page.
+const H = first ? 'h2' : 'h3';
+const { variant, tone, heading, intro, items } = section;
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} intro={intro} align={variant === 'line' ? 'split' : 'start'} first={first}>
+  <ol class="steps" data-variant={variant} role="list" style={`--count:${items.length}`}>
+    {
+      items.map((item) => (
+        <li class="step">
+          <H>{item.title}</H>
+          <p>{item.text}</p>
+        </li>
+      ))
+    }
+  </ol>
+</Section>
+
+<style>
+  .steps { counter-reset: step; }
+  .step { counter-increment: step; position: relative; }
+  .step :is(h2, h3) { font-size: var(--text-m); margin-bottom: var(--space-3xs); }
+  .step p { color: var(--color-muted); max-width: 42ch; }
+
+  /* Numbered: large numerals in the heading font lead each step. */
+  .steps[data-variant='numbered'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: var(--space-xl) var(--space-l);
+  }
+  .steps[data-variant='numbered'] .step::before {
+    content: counter(step);
+    display: block;
+    margin-bottom: var(--space-xs);
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    font-size: var(--text-3xl);
+    line-height: 1;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Line: numbered dots joined by a rule that draws across as the row scrolls into view. */
+  .steps[data-variant='line'] {
+    display: grid;
+    gap: var(--space-l);
+  }
+  .steps[data-variant='line'] .step {
+    padding-left: 3.5rem;
+  }
+  .steps[data-variant='line'] .step::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: -0.2rem;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--color-accent);
+    border-radius: 999px;
+    background: var(--color-background);
+    color: var(--color-accent);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .steps[data-variant='line'] .step:first-child::before {
+    background: var(--color-accent);
+    color: var(--color-background);
+  }
+  @media (min-width: 48rem) {
+    .steps[data-variant='line'] {
+      position: relative;
+      grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+      gap: var(--space-l);
+    }
+    .steps[data-variant='line']::before {
+      content: '';
+      position: absolute;
+      top: 1.25rem;
+      left: 1.25rem;
+      right: calc(100% / var(--count));
+      height: 1px;
+      background: var(--color-border);
+      transform-origin: left center;
+    }
+    .steps[data-variant='line'] .step { padding-left: 0; padding-top: 3.5rem; }
+    .steps[data-variant='line'] .step::before { top: 0; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .steps[data-variant='line']::before {
+        animation-name: draw-rule;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 40% cover 45%;
+      }
+    }
+  }
+  @keyframes draw-rule {
+    from { transform: scaleX(0); }
+  }
+</style>

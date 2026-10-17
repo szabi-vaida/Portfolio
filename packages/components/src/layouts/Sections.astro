@@ -1,0 +1,27 @@
+---
+import { SECTIONS } from '../sections/index';
+import { placeSections, type Section, type SiteSpec } from '../lib/site';
+
+interface Props {
+  site: SiteSpec;
+  sections: Section[];
+}
+
+const { site, sections } = Astro.props;
+// Forge Studio sets this for its live preview, so it can find each section on the page. Normal builds never do.
+const markers = process.env.FORGE_STUDIO_PREVIEW === '1';
+const placed = placeSections(sections).map((p) => {
+  const Component = SECTIONS[p.section.type] as (props: Record<string, unknown>) => unknown;
+  if (!Component) throw new Error(`No component for section type "${p.section.type}"`);
+  return { ...p, Component };
+});
+---
+
+{
+  placed.map(({ section, anchor, first, Component }, i) => (
+    <Fragment>
+      {markers && <Fragment set:html={`<!--sfe-section:${i}-->`} />}
+      <Component section={section} anchor={anchor} first={first} site={site} />
+    </Fragment>
+  ))
+}

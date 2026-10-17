@@ -1,0 +1,10 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "paths": {
+      "@webcore/*": ["../../node_modules/webcoreui/components/*"]
+    }
+  },
+  "include": [".astro/types.d.ts", "src", "astro.config.ts", "../../packages/components/src"],
+  "exclude": ["dist"]
+}

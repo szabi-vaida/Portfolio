@@ -1,0 +1,128 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Button from '../primitives/Button.astro';
+import Badge from '../primitives/Badge.astro';
+import Icon from '../primitives/Icon.astro';
+import Section from '../primitives/Section.astro';
+import Ribbon from '../vendor/Ribbon.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'pricing'>>;
+
+const { section, anchor, first } = Astro.props;
+// Item titles sit one level below the section heading, which is the h1 when the section opens the page.
+const H = first ? 'h2' : 'h3';
+const { variant, tone, heading, intro, plans, note } = section;
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} intro={intro} align={variant === 'cards' ? 'centre' : 'split'} first={first}>
+  <ul class="plans" data-variant={variant} role="list" style={`--count:${plans.length}`}>
+    {
+      plans.map((plan) => (
+        <li class="plan" data-highlight={plan.highlight ? '' : undefined}>
+          {plan.badge && variant === 'cards' && <Ribbon>{plan.badge}</Ribbon>}
+          <div class="plan-head">
+            <H>
+              {plan.name}
+              {plan.badge && variant === 'list' && <Badge tone="accent">{plan.badge}</Badge>}
+            </H>
+            {plan.description && <p class="plan-description">{plan.description}</p>}
+          </div>
+          <p class="plan-price">
+            <span class="amount">{plan.price}</span>
+            {plan.period && <span class="period">{plan.period}</span>}
+          </p>
+          {plan.features && plan.features.length > 0 && (
+            <ul class="plan-features" role="list">
+              {plan.features.map((f) => (
+                <li>
+                  <Icon name="check" size={1.05} />
+                  {f}
+                </li>
+              ))}
+            </ul>
+          )}
+          {plan.button && (
+            <div class="plan-button">
+              <Button href={plan.button.href} variant={plan.highlight ? 'primary' : 'secondary'}>
+                {plan.button.label}
+              </Button>
+            </div>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+  {note && <p class="note">{note}</p>}
+</Section>
+
+<style>
+  .plan { position: relative; }
+  .plan :is(h2, h3) { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs); font-size: var(--text-l); }
+  .plan-description { margin-top: var(--space-3xs); color: var(--color-muted); }
+  .plan-price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    font-variant-numeric: tabular-nums;
+  }
+  .amount {
+    white-space: nowrap;
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    font-size: var(--text-2xl);
+    letter-spacing: var(--heading-tracking);
+    line-height: 1;
+  }
+  .period { color: var(--color-muted); font-size: var(--text-s); }
+  .plan-features { display: grid; gap: var(--space-2xs); }
+  .plan-features li { display: flex; gap: 0.6em; align-items: baseline; }
+  .plan-features :global(svg) { position: relative; top: 0.2em; color: var(--color-accent); }
+  .note { margin-top: var(--space-l); color: var(--color-muted); font-size: var(--text-s); text-align: center; }
+
+  /* Cards: plans side by side, buttons lined up along the bottom. */
+  .plans[data-variant='cards'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: var(--space-m);
+    align-items: stretch;
+  }
+  .plans[data-variant='cards'] .plan {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+    padding: var(--space-xl) var(--space-l) var(--space-l);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-l);
+    background: var(--color-surface);
+  }
+  .plans[data-variant='cards'] .plan[data-highlight] {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-l);
+  }
+  @media (min-width: 64rem) {
+    .plans[data-variant='cards'] .plan[data-highlight] { transform: translateY(calc(-1 * var(--space-s))); }
+  }
+  .plans[data-variant='cards'] .plan:has(:global(.ribbon)) { padding-top: calc(var(--space-xl) + var(--space-m)); }
+  .plans[data-variant='cards'] .plan-features { flex: 1; align-content: start; }
+  .plans[data-variant='cards'] .plan-button :global(.button) { width: 100%; }
+
+  /* List: one plan per row, like a price list, for services with many options. */
+  .plans[data-variant='list'] { border-top: 1px solid var(--color-border); }
+  .plans[data-variant='list'] .plan {
+    display: grid;
+    gap: var(--space-s);
+    padding-block: var(--space-l);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .plans[data-variant='list'] .plan-features { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); color: var(--color-muted); }
+  @media (min-width: 56rem) {
+    .plans[data-variant='list'] .plan {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.6fr) minmax(0, 1.4fr) auto;
+      align-items: center;
+      column-gap: var(--space-l);
+    }
+    .plans[data-variant='list'] .amount { font-size: var(--text-xl); }
+  }
+</style>

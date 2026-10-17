@@ -1,0 +1,24 @@
+---
+interface Props {
+  /** The heading level in the page outline. */
+  level?: 1 | 2 | 3 | 4;
+  /** The visual size. Defaults to a size that suits the level. */
+  size?: 'display' | 'xl' | 'l' | 'm' | 's';
+  class?: string;
+  id?: string;
+}
+
+const DEFAULT_SIZE = { 1: 'display', 2: 'xl', 3: 'm', 4: 's' } as const;
+const { level = 2, size = DEFAULT_SIZE[level], class: className, id } = Astro.props;
+const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4';
+---
+
+<Tag class:list={['heading', className]} data-size={size} id={id}><slot /></Tag>
+
+<style>
+  .heading[data-size='display'] { font-size: var(--text-4xl); line-height: 1.02; }
+  .heading[data-size='xl'] { font-size: var(--text-3xl); line-height: 1.06; }
+  .heading[data-size='l'] { font-size: var(--text-2xl); line-height: 1.1; }
+  .heading[data-size='m'] { font-size: var(--text-l); line-height: 1.2; }
+  .heading[data-size='s'] { font-size: var(--text-m); line-height: 1.3; }
+</style>

@@ -1,0 +1,87 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Image from '../primitives/Image.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'team'>>;
+
+const { section, anchor, first } = Astro.props;
+// Item titles sit one level below the section heading, which is the h1 when the section opens the page.
+const H = first ? 'h2' : 'h3';
+const { variant, tone, heading, intro, members } = section;
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .map((w) => w.charAt(0))
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} intro={intro} align="split" first={first}>
+  <ul class="team" data-variant={variant} role="list">
+    {
+      members.map((m) => (
+        <li class="member">
+          <div class="photo">
+            {m.image ? (
+              <Image image={m.image} ratio={variant === 'grid' ? '4/5' : '1/1'} widths={[240, 400, 600]} sizes={variant === 'grid' ? '(min-width: 56rem) 18rem, 45vw' : '6rem'} />
+            ) : (
+              <span class="initials" aria-hidden="true">
+                {initials(m.name)}
+              </span>
+            )}
+          </div>
+          <div class="member-body">
+            <H>{m.name}</H>
+            <p class="role">{m.role}</p>
+            {m.bio && <p class="bio">{m.bio}</p>}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</Section>
+
+<style>
+  .member :is(h2, h3) { font-size: var(--text-m); }
+  .role { color: var(--color-accent); font-size: var(--text-s); font-weight: 600; }
+  .bio { margin-top: var(--space-2xs); color: var(--color-muted); font-size: var(--text-s); max-width: 44ch; }
+  .photo {
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    background: var(--color-tinted);
+  }
+  .initials {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 5;
+    color: var(--color-muted);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+  }
+
+  /* Grid: tall portraits with names underneath. */
+  .team[data-variant='grid'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+    gap: var(--space-xl) var(--space-l);
+  }
+  .team[data-variant='grid'] .member-body { margin-top: var(--space-s); }
+
+  /* List: a small round photo beside each bio, for teams with more to say. */
+  .team[data-variant='list'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: var(--space-l) var(--space-xl);
+  }
+  .team[data-variant='list'] .member {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: var(--space-m);
+    align-items: start;
+  }
+  .team[data-variant='list'] .photo { border-radius: 999px; }
+  .team[data-variant='list'] .initials { aspect-ratio: 1; font-size: var(--text-l); }
+</style>

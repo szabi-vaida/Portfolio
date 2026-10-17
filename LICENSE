@@ -1,0 +1,25 @@
+Forge
+Copyright (c) 2026 Szabi Vaida. All rights reserved.
+
+Forge is proprietary software. This covers its source code, engine, Forge Studio, templates, sections,
+themes and documentation (together, "Forge"). You may not copy, modify, distribute, sublicense or sell
+Forge, in whole or in part, without written permission from the copyright holder, except as set out below.
+
+YOUR WEBSITE
+A website you create with Forge belongs to you. That includes your words, images and other content,
+your site.yaml file and the built website files. You may keep, change, host and use your website
+anywhere, including commercially. No fee is due and no credit to Forge is needed on the site.
+
+ENGINE CODE IN AN EXPORT
+An export of your site includes the parts of Forge needed to build it. You may use, change and host
+that code, free of charge, only to build, run and maintain that website. You may not redistribute it
+on its own, or use it to offer a website builder, template or theme product. Keep this file with the
+export.
+
+Some bundled files come from other projects under their own licences. CREDITS.md lists them.
+
+NO WARRANTY
+FORGE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH FORGE OR THE USE OF IT.

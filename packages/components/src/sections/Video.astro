@@ -1,0 +1,76 @@
+---
+import type { SectionOf } from '@forge/schema';
+import Icon from '../primitives/Icon.astro';
+import Image from '../primitives/Image.astro';
+import Section from '../primitives/Section.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'video'>>;
+
+const { section, anchor, first } = Astro.props;
+const { variant, tone, heading, intro, title, url, poster } = section;
+const host = url.includes('vimeo') ? 'Vimeo' : 'YouTube';
+// The poster links out to the video. No embedded player loads, so the page stays fast and private.
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} intro={intro} align={variant === 'wide' ? 'centre' : 'split'} width={variant === 'wide' ? 'wide' : 'default'} first={first}>
+  <a class="video" data-variant={variant} href={url} rel="noopener">
+    <Image image={poster} ratio="16/9" sizes={variant === 'wide' ? '(min-width: 90rem) 90rem, 100vw' : '(min-width: 74rem) 74rem, 100vw'} />
+    <span class="play" aria-hidden="true"><Icon name="play" size={1.6} /></span>
+    <span class="label">
+      <span class="visually-hidden">Watch on {host}: </span>
+      {title}
+      <span class="host" aria-hidden="true">Watch on {host}</span>
+    </span>
+  </a>
+</Section>
+
+<style>
+  .video {
+    position: relative;
+    display: block;
+    border-radius: var(--radius-l);
+    overflow: hidden;
+    color: #fff;
+    text-decoration: none;
+  }
+  .video::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 45%, rgb(0 0 0 / 0.7));
+  }
+  .play {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    margin: auto;
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.92);
+    color: #111;
+    transition: transform 220ms var(--ease-out);
+  }
+  .play :global(svg) { fill: currentColor; transform: translateX(2px); }
+  .video:hover .play { transform: scale(1.08); }
+  .label {
+    position: absolute;
+    z-index: 1;
+    left: var(--space-l);
+    right: var(--space-l);
+    bottom: var(--space-l);
+    display: grid;
+    gap: var(--space-3xs);
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    font-size: var(--text-l);
+    line-height: 1.2;
+  }
+  .host { font-family: var(--font-body); font-size: var(--text-s); font-weight: 500; opacity: 0.85; }
+  @media (prefers-reduced-motion: reduce) {
+    .video:hover .play { transform: none; }
+  }
+</style>

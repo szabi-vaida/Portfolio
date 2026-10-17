@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import type { SectionOf } from '@forge/schema';
+import Button from '../primitives/Button.astro';
+import Section from '../primitives/Section.astro';
+import PostList from '../parts/PostList.astro';
+import type { SectionProps } from '../lib/site';
+
+type Props = SectionProps<SectionOf<'blog-list'>>;
+
+const { section, anchor, first, site } = Astro.props;
+const { variant, tone, heading, intro, limit } = section;
+const blog = site.blog!;
+const all = (await getCollection('posts', (p) => !p.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const posts = all.slice(0, limit);
+---
+
+<Section anchor={anchor} tone={tone} heading={heading} intro={intro} align="split" first={first}>
+  <PostList posts={posts} base={blog.path} locale={site.meta.locale} variant={variant} level={first ? 2 : 3} />
+  {
+    all.length > posts.length && (
+      <p class="more">
+        <Button href={blog.path} variant="quiet">All posts</Button>
+      </p>
+    )
+  }
+</Section>
+
+<style>
+  .more { margin-top: var(--space-l); }
+</style>

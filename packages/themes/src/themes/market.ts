@@ -1,0 +1,41 @@
+import type { Theme } from '../types.ts';
+
+/** Terracotta and bottle green with a characterful grotesk. For shops and makers. */
+export const market: Theme = {
+  label: 'Market',
+  description: 'Terracotta and bottle green with a lively grotesk. Warm and hands-on.',
+  fonts: { heading: 'Bricolage Grotesque', body: 'Figtree' },
+  headingWeight: 700,
+  headingTracking: -0.03,
+  light: {
+    background: '#fffcf6',
+    tinted: '#f6efe3',
+    surface: '#ffffff',
+    text: '#1f1a17',
+    muted: '#5c534c',
+    border: '#e6dccd',
+    primary: '#a63d1c',
+    'on-primary': '#ffffff',
+    accent: '#2d6a4f',
+    bold: '#1f4d39',
+    'on-bold': '#fdf6ea',
+  },
+  dark: {
+    background: '#161311',
+    tinted: '#1f1a17',
+    surface: '#26201c',
+    text: '#f6efe6',
+    muted: '#b8ab9d',
+    border: '#3a312a',
+    primary: '#f08a5d',
+    'on-primary': '#1f1a17',
+    accent: '#7cc4a0',
+    bold: '#f6efe6',
+    'on-bold': '#1f1a17',
+  },
+  defaultMode: 'light',
+  corners: 'round',
+  spacing: 'comfortable',
+  textSize: 'medium',
+  shadow: 'soft',
+};
